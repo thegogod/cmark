@@ -82,7 +82,7 @@ func (self CMark) ParseDir(path string) ([]ast.Node, error) {
 			}
 
 			nodes = append(nodes, v...)
-		} else if strings.HasPrefix(entry.Name(), ".md") {
+		} else if strings.HasSuffix(entry.Name(), ".md") {
 			v, err := self.ParseFile(entryPath)
 
 			if err != nil {
