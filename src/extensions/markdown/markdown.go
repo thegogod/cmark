@@ -7,14 +7,18 @@ import (
 
 type Markdown struct{}
 
+func New() Markdown {
+	return Markdown{}
+}
+
 func (self Markdown) Name() string {
 	return "markdown"
 }
 
-func (self Markdown) ParseBlock(ptr *tokens.Pointer) (ast.Node, error) {
+func (self Markdown) ParseBlock(parser ast.Parser, ptr *tokens.Pointer) (ast.Node, error) {
 	return nil, nil
 }
 
-func (self Markdown) ParseInline(ptr *tokens.Pointer) (ast.Node, error) {
+func (self Markdown) ParseInline(parser ast.Parser, ptr *tokens.Pointer) (ast.Node, error) {
 	return nil, nil
 }

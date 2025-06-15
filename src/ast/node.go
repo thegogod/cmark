@@ -7,6 +7,6 @@ type Visitor interface {
 }
 
 type Node interface {
-	Validate(scope Scope) error
-	Evaluate(scope Scope) (reflect.Value, error)
+	Validate(scope *Scope) error
+	Evaluate(scope *Scope) (reflect.Value, error)
 }

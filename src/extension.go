@@ -7,6 +7,6 @@ import (
 
 type Extension interface {
 	Name() string
-	ParseBlock(ptr *tokens.Pointer) (ast.Node, error)
-	ParseInline(ptr *tokens.Pointer) (ast.Node, error)
+	ParseBlock(parser ast.Parser, ptr *tokens.Pointer) (ast.Node, error)
+	ParseInline(parser ast.Parser, ptr *tokens.Pointer) (ast.Node, error)
 }
