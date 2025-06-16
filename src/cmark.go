@@ -153,6 +153,12 @@ func (self CMark) ParseInline(ptr *tokens.Pointer) (ast.Node, error) {
 	return node, err
 }
 
+func (self CMark) ParseSyntax(ptr *tokens.Pointer, extension string, name string) (ast.Node, error) {
+	self.printf("parsing '%s->%s'...", extension, name)
+	self.print("done\n")
+	return nil, nil
+}
+
 func (self CMark) print(message string) {
 	if self.logger == nil {
 		return

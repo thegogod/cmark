@@ -39,3 +39,7 @@ func (self Token) String() string {
 func (self Token) Error(message string) error {
 	return Err(self.start, self.end, message)
 }
+
+func (self Token) Ptr() *Token {
+	return &self
+}

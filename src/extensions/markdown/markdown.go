@@ -22,3 +22,7 @@ func (self Markdown) ParseBlock(parser ast.Parser, ptr *tokens.Pointer) (ast.Nod
 func (self Markdown) ParseInline(parser ast.Parser, ptr *tokens.Pointer) (ast.Node, error) {
 	return nil, nil
 }
+
+func (self Markdown) ParseSyntax(parser ast.Parser, ptr *tokens.Pointer, name string) (ast.Node, error) {
+	return nil, nil
+}
