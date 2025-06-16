@@ -3,6 +3,7 @@ package html
 import (
 	"github.com/thegogod/cmark/ast"
 	"github.com/thegogod/cmark/maps"
+	"github.com/thegogod/cmark/reflect"
 )
 
 type Host map[string]any
@@ -117,4 +118,13 @@ func (self Host) Select(query ...any) []Node {
 	}
 
 	return nodes
+}
+
+func (self Host) Validate(scope *ast.Scope) error {
+	return nil
+}
+
+func (self Host) Evaluate(scope *ast.Scope) (reflect.Value, error) {
+	value := self.Render(scope)
+	return reflect.NewString(string(value)), nil
 }

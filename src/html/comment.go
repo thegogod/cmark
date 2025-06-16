@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"github.com/thegogod/cmark/ast"
+	"github.com/thegogod/cmark/reflect"
 
 	"github.com/thegogod/cmark/maps"
 )
@@ -104,4 +105,13 @@ func (self Comment) GetById(id string) Node {
 
 func (self Comment) Select(query ...any) []Node {
 	return []Node{}
+}
+
+func (self Comment) Validate(scope *ast.Scope) error {
+	return nil
+}
+
+func (self Comment) Evaluate(scope *ast.Scope) (reflect.Value, error) {
+	value := self.Render(scope)
+	return reflect.NewString(string(value)), nil
 }

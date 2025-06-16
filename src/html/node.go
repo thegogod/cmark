@@ -6,6 +6,8 @@ import (
 )
 
 type Node interface {
+	ast.Node
+
 	GetSelector() string
 
 	HasAttr(name string) bool

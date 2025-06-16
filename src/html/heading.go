@@ -5,6 +5,7 @@ import (
 	"unicode"
 
 	"github.com/thegogod/cmark/ast"
+	"github.com/thegogod/cmark/reflect"
 
 	"github.com/thegogod/cmark/maps"
 )
@@ -237,4 +238,13 @@ func (self *HeadingElement) GetById(id string) Node {
 
 func (self *HeadingElement) Select(query ...any) []Node {
 	return self.element.Select(query...)
+}
+
+func (self HeadingElement) Validate(scope *ast.Scope) error {
+	return nil
+}
+
+func (self HeadingElement) Evaluate(scope *ast.Scope) (reflect.Value, error) {
+	value := self.Render(scope)
+	return reflect.NewString(string(value)), nil
 }

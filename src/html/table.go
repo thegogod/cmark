@@ -3,6 +3,7 @@ package html
 import (
 	"github.com/thegogod/cmark/ast"
 	"github.com/thegogod/cmark/maps"
+	"github.com/thegogod/cmark/reflect"
 )
 
 // https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/table
@@ -148,4 +149,13 @@ func (self *TableElement) GetById(id string) Node {
 
 func (self *TableElement) Select(query ...any) []Node {
 	return self.element.Select(query...)
+}
+
+func (self TableElement) Validate(scope *ast.Scope) error {
+	return nil
+}
+
+func (self TableElement) Evaluate(scope *ast.Scope) (reflect.Value, error) {
+	value := self.Render(scope)
+	return reflect.NewString(string(value)), nil
 }

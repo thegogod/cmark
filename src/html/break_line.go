@@ -3,6 +3,7 @@ package html
 import (
 	"github.com/thegogod/cmark/ast"
 	"github.com/thegogod/cmark/maps"
+	"github.com/thegogod/cmark/reflect"
 )
 
 // https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/br
@@ -130,4 +131,13 @@ func (self *BreakLineElement) GetById(id string) Node {
 
 func (self *BreakLineElement) Select(query ...any) []Node {
 	return self.element.Select(query...)
+}
+
+func (self BreakLineElement) Validate(scope *ast.Scope) error {
+	return nil
+}
+
+func (self BreakLineElement) Evaluate(scope *ast.Scope) (reflect.Value, error) {
+	value := self.Render(scope)
+	return reflect.NewString(string(value)), nil
 }

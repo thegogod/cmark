@@ -3,6 +3,7 @@ package html
 import (
 	"github.com/thegogod/cmark/ast"
 	"github.com/thegogod/cmark/maps"
+	"github.com/thegogod/cmark/reflect"
 )
 
 type MetaDataElement map[string]any
@@ -141,4 +142,13 @@ func (self MetaDataElement) Select(query ...any) []Node {
 	}
 
 	return nodes
+}
+
+func (self MetaDataElement) Validate(scope *ast.Scope) error {
+	return nil
+}
+
+func (self MetaDataElement) Evaluate(scope *ast.Scope) (reflect.Value, error) {
+	value := self.Render(scope)
+	return reflect.NewString(string(value)), nil
 }

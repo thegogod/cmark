@@ -4,6 +4,7 @@ import (
 	"strconv"
 
 	"github.com/thegogod/cmark/ast"
+	"github.com/thegogod/cmark/reflect"
 
 	"github.com/thegogod/cmark/maps"
 )
@@ -193,4 +194,13 @@ func (self *TextInputElement) GetById(id string) Node {
 
 func (self *TextInputElement) Select(query ...any) []Node {
 	return self.element.Select(query...)
+}
+
+func (self TextInputElement) Validate(scope *ast.Scope) error {
+	return nil
+}
+
+func (self TextInputElement) Evaluate(scope *ast.Scope) (reflect.Value, error) {
+	value := self.Render(scope)
+	return reflect.NewString(string(value)), nil
 }
