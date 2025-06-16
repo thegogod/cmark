@@ -12,7 +12,7 @@ func (self *Markdown) ParseBlockQuote(parser ast.Parser, ptr *tokens.Pointer) (a
 
 func (self *Markdown) parseBlockQuote(parser ast.Parser, scan *_Scanner) (*html.BlockQuoteElement, error) {
 	if !scan.Match(GreaterThan) {
-		return nil, scan.curr.Error("expected '>'")
+		return nil, scan.Curr().Error("expected '>'")
 	}
 
 	self.blockQuoteDepth++
@@ -28,7 +28,7 @@ func (self *Markdown) parseBlockQuote(parser ast.Parser, scan *_Scanner) (*html.
 
 		el.Push(node)
 
-		if scan.curr.Kind() != GreaterThan {
+		if scan.Curr().Kind() != GreaterThan {
 			break
 		}
 	}

@@ -37,7 +37,7 @@ func (self *CMark) WithLogging(logger logging.Logger) *CMark {
 }
 
 func (self *CMark) Parse(src []byte) (ast.Node, error) {
-	document := html.New()
+	document := html.Fragment()
 	ptr := tokens.Ptr(src)
 	ptr.Next()
 
@@ -56,7 +56,7 @@ func (self *CMark) Parse(src []byte) (ast.Node, error) {
 			continue
 		}
 
-		document.Push()
+		document.Push(html.Ast(node))
 	}
 
 	return document, nil
@@ -121,7 +121,7 @@ func (self *CMark) ParseBlock(ptr *tokens.Pointer) (ast.Node, error) {
 	for _, ext := range self.extensions {
 		node, err = ext.ParseBlock(self, ptr)
 
-		if err == nil {
+		if node != nil && err == nil {
 			break
 		}
 
@@ -144,7 +144,7 @@ func (self *CMark) ParseInline(ptr *tokens.Pointer) (ast.Node, error) {
 	for _, ext := range self.extensions {
 		node, err = ext.ParseInline(self, ptr)
 
-		if err == nil {
+		if node != nil && err == nil {
 			break
 		}
 

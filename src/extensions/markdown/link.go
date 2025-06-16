@@ -12,7 +12,7 @@ func (self *Markdown) ParseLink(parser ast.Parser, ptr *tokens.Pointer) (ast.Nod
 
 func (self *Markdown) parseLink(parser ast.Parser, scan *_Scanner) (*html.AnchorElement, error) {
 	if !scan.Match(LeftBracket) {
-		return nil, scan.curr.Error("expected '['")
+		return nil, scan.Curr().Error("expected '['")
 	}
 
 	link := html.A()

@@ -12,7 +12,7 @@ func (self *Markdown) ParseBoldAlt(parser ast.Parser, ptr *tokens.Pointer) (ast.
 
 func (self *Markdown) parseBoldAlt(parser ast.Parser, scan *_Scanner) (*html.StrongElement, error) {
 	if !scan.MatchCount(Underscore, 2) {
-		return nil, scan.curr.Error("expected '__'")
+		return nil, scan.Curr().Error("expected '__'")
 	}
 
 	el := html.Strong()
@@ -21,7 +21,7 @@ func (self *Markdown) parseBoldAlt(parser ast.Parser, scan *_Scanner) (*html.Str
 		node, err := parser.ParseInline(scan.ptr)
 
 		if node == nil {
-			return el, scan.curr.Error("expected closing '__'")
+			return el, scan.Curr().Error("expected closing '__'")
 		}
 
 		if err != nil {

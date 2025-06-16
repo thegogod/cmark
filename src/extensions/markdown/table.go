@@ -14,7 +14,7 @@ func (self *Markdown) ParseTable(parser ast.Parser, ptr *tokens.Pointer) (ast.No
 
 func (self *Markdown) parseTable(parser ast.Parser, scan *_Scanner) (*html.TableElement, error) {
 	if !scan.MatchCount(Pipe, 1) {
-		return nil, scan.curr.Error("expected '|'")
+		return nil, scan.Curr().Error("expected '|'")
 	}
 
 	table := html.Table()
@@ -35,7 +35,7 @@ func (self *Markdown) parseTable(parser ast.Parser, scan *_Scanner) (*html.Table
 			node, err := parser.ParseInline(scan.ptr)
 
 			if node == nil {
-				return table, scan.curr.Error("invalid table header")
+				return table, scan.Curr().Error("invalid table header")
 			}
 
 			if err != nil {
@@ -70,7 +70,7 @@ func (self *Markdown) parseTable(parser ast.Parser, scan *_Scanner) (*html.Table
 		node, err := self.parseTextUntil(Pipe, parser, scan)
 
 		if node == nil {
-			return table, scan.curr.Error("expected closing '|'")
+			return table, scan.Curr().Error("expected closing '|'")
 		}
 
 		if err != nil {
@@ -86,12 +86,12 @@ func (self *Markdown) parseTable(parser ast.Parser, scan *_Scanner) (*html.Table
 			}
 
 			if b != ':' && b != '-' {
-				return table, scan.curr.Error("invalid header separator")
+				return table, scan.Curr().Error("invalid header separator")
 			}
 		}
 
 		if dashes < 3 {
-			return table, scan.curr.Error("invalid header seperator")
+			return table, scan.Curr().Error("invalid header seperator")
 		}
 
 		leftAlign := bytes.HasPrefix(node, []byte{':'})
@@ -129,7 +129,7 @@ func (self *Markdown) parseTable(parser ast.Parser, scan *_Scanner) (*html.Table
 				node, err := parser.ParseInline(scan.ptr)
 
 				if node == nil {
-					return table, scan.curr.Error("expected closing '|'")
+					return table, scan.Curr().Error("expected closing '|'")
 				}
 
 				if err != nil {
@@ -156,7 +156,7 @@ func (self *Markdown) parseTable(parser ast.Parser, scan *_Scanner) (*html.Table
 			rows = append(rows, td.WithStyles(columns[i].GetStyles()...))
 		}
 
-		if scan.curr.Kind() == Eof {
+		if scan.Curr().Kind() == Eof {
 			break
 		}
 

@@ -4,6 +4,7 @@ type Pointer struct {
 	Src   []byte
 	Start Position
 	End   Position
+	Iter  Iterator
 }
 
 func Ptr(src []byte) *Pointer {
@@ -11,6 +12,7 @@ func Ptr(src []byte) *Pointer {
 		Src:   src,
 		Start: Position{},
 		End:   Position{},
+		Iter:  Iterator{},
 	}
 }
 
@@ -59,10 +61,14 @@ func (self Pointer) Err(message string) error {
 }
 
 func (self *Pointer) Ok(kind rune) Token {
-	return New(
+	token := New(
 		kind,
 		self.Start,
 		self.End,
 		self.Bytes(),
 	)
+
+	self.Iter.Prev = self.Iter.Curr
+	self.Iter.Curr = token
+	return token
 }

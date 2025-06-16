@@ -61,7 +61,7 @@ func (self *Markdown) parseBlock(parser ast.Parser, scan *_Scanner) (ast.Node, e
 		return self.parseBlock(parser, scan)
 	}
 
-	tx := tx.New(scan)
+	tx := tx.Compound(tx.New(scan.ptr), tx.New(scan))
 	node, err = self.parseHtml(parser, scan)
 
 	if err != nil {
@@ -135,7 +135,7 @@ func (self *Markdown) parseInline(parser ast.Parser, scan *_Scanner) (ast.Node, 
 	var node ast.Node = nil
 	var err error = nil
 
-	tx := tx.New(scan)
+	tx := tx.Compound(tx.New(scan.ptr), tx.New(scan))
 	node, err = self.parseBold(parser, scan)
 
 	if err != nil {
@@ -203,6 +203,10 @@ func (self *Markdown) parseInline(parser ast.Parser, scan *_Scanner) (ast.Node, 
 		node, err = self.parseNewLine(parser, scan)
 	}
 
+	if err != nil {
+		tx.Rollback()
+	}
+
 	if node == nil || err != nil {
 		text, texterr := self.parseText(parser, scan)
 
@@ -217,19 +221,19 @@ func (self *Markdown) parseInline(parser ast.Parser, scan *_Scanner) (ast.Node, 
 }
 
 func (self *Markdown) parseText(_ ast.Parser, scan *_Scanner) ([]byte, error) {
-	if scan.curr.Kind() == Eof {
+	if scan.Curr().Kind() == Eof {
 		return nil, nil
 	}
 
-	text := html.Raw(scan.curr.Bytes())
+	text := html.Raw(scan.Curr().Bytes())
 	scan.Next()
 
 	if bytes.Equal(text, []byte{' '}) {
 		return text, nil
 	}
 
-	for scan.curr.Kind() == Text {
-		text = append(text, scan.curr.Bytes()...)
+	for scan.Curr().Kind() == Text {
+		text = append(text, scan.Curr().Bytes()...)
 		scan.Next()
 	}
 
@@ -237,7 +241,7 @@ func (self *Markdown) parseText(_ ast.Parser, scan *_Scanner) ([]byte, error) {
 }
 
 func (self *Markdown) parseTextUntil(kind rune, parser ast.Parser, scan *_Scanner) ([]byte, error) {
-	if scan.curr.Kind() == Eof {
+	if scan.Curr().Kind() == Eof {
 		return nil, nil
 	}
 

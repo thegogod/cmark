@@ -20,12 +20,12 @@ func (self *Markdown) parseUrl(parser ast.Parser, scan *_Scanner) (*html.AnchorE
 
 	if text == nil || err != nil {
 		defer tx.Rollback()
-		return nil, scan.curr.Error("expected text")
+		return nil, scan.Curr().Error("expected text")
 	}
 
 	if !strings.HasPrefix(string(text), "http") {
 		defer tx.Rollback()
-		return nil, scan.curr.Error("expected 'http' prefix")
+		return nil, scan.Curr().Error("expected 'http' prefix")
 	}
 
 	link := html.A()
@@ -54,7 +54,7 @@ func (self *Markdown) parseUrl(parser ast.Parser, scan *_Scanner) (*html.AnchorE
 
 		path = append(path, part...)
 
-		if scan.curr.Kind() != Period {
+		if scan.Curr().Kind() != Period {
 			break
 		}
 	}

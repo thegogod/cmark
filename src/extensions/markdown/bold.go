@@ -12,7 +12,7 @@ func (self *Markdown) ParseBold(parser ast.Parser, ptr *tokens.Pointer) (ast.Nod
 
 func (self *Markdown) parseBold(parser ast.Parser, scan *_Scanner) (*html.StrongElement, error) {
 	if !scan.MatchCount(Asterisk, 2) {
-		return nil, scan.curr.Error("expected '**'")
+		return nil, scan.Curr().Error("expected '**'")
 	}
 
 	el := html.Strong()
@@ -21,7 +21,7 @@ func (self *Markdown) parseBold(parser ast.Parser, scan *_Scanner) (*html.Strong
 		node, err := parser.ParseInline(scan.ptr)
 
 		if node == nil {
-			return el, scan.curr.Error("expected closing '**'")
+			return el, scan.Curr().Error("expected closing '**'")
 		}
 
 		if err != nil {

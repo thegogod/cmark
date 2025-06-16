@@ -12,12 +12,12 @@ func (self *Markdown) ParseH5(parser ast.Parser, ptr *tokens.Pointer) (ast.Node,
 
 func (self *Markdown) parseH5(parser ast.Parser, scan *_Scanner) (*html.HeadingElement, error) {
 	if !scan.MatchCount(Hash, 5) || !scan.Match(Space) {
-		return nil, scan.curr.Error("expected '##### '")
+		return nil, scan.Curr().Error("expected '##### '")
 	}
 
 	heading := html.H5()
 
-	for scan.curr.Kind() != Eof && scan.curr.Kind() != NewLine {
+	for scan.Curr().Kind() != Eof && scan.Curr().Kind() != NewLine {
 		node, err := parser.ParseInline(scan.ptr)
 
 		if node == nil || err != nil {

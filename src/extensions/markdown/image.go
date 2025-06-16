@@ -12,7 +12,7 @@ func (self *Markdown) ParseImage(parser ast.Parser, ptr *tokens.Pointer) (ast.No
 
 func (self *Markdown) parseImage(parser ast.Parser, scan *_Scanner) (*html.ImageElement, error) {
 	if !scan.Match(Bang) {
-		return nil, scan.curr.Error("expected '!'")
+		return nil, scan.Curr().Error("expected '!'")
 	}
 
 	image := html.Img()

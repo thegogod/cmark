@@ -26,7 +26,7 @@ func (self *Markdown) parseTask(parser ast.Parser, scan *_Scanner) (*html.LabelE
 	}
 
 	if checked.String() != " " && checked.String() != "x" {
-		return label, scan.curr.Error("expected ' ' or 'x'")
+		return label, scan.Curr().Error("expected ' ' or 'x'")
 	}
 
 	if checked.String() == "x" {

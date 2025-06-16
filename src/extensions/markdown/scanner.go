@@ -9,8 +9,6 @@ import (
 
 type _Scanner struct {
 	ptr   *tokens.Pointer
-	prev  tokens.Token
-	curr  tokens.Token
 	types []func(ptr *tokens.Pointer) (*tokens.Token, error)
 }
 
@@ -21,22 +19,28 @@ func NewScanner(ptr *tokens.Pointer, types ...func(ptr *tokens.Pointer) (*tokens
 	}
 }
 
+func (self _Scanner) Prev() tokens.Token {
+	return self.ptr.Iter.Prev
+}
+
+func (self _Scanner) Curr() tokens.Token {
+	return self.ptr.Iter.Curr
+}
+
 func (self *_Scanner) Next() bool {
-	self.prev = self.curr
 	token, err := self.Scan()
 
 	if err != nil {
 		return self.Next()
 	}
 
-	self.curr = *token
 	return token.Kind() > 0
 }
 
 func (self *_Scanner) NextWhile(kind ...rune) int {
 	i := 0
 
-	for slices.Contains(kind, self.curr.Kind()) {
+	for slices.Contains(kind, self.Curr().Kind()) {
 		i++
 		self.Next()
 	}
@@ -48,7 +52,7 @@ func (self *_Scanner) Match(kind ...rune) bool {
 	tx := tx.New(self)
 
 	for _, k := range kind {
-		if self.curr.Kind() != k {
+		if self.Curr().Kind() != k {
 			tx.Rollback()
 			return false
 		}
@@ -82,7 +86,7 @@ func (self *_Scanner) MatchLiteral(value string) bool {
 	i := 0
 
 	for i < len(value) {
-		for _, b := range self.curr.Bytes() {
+		for _, b := range self.Curr().Bytes() {
 			if i >= len(value) {
 				break
 			}
@@ -105,12 +109,12 @@ func (self *_Scanner) MatchLiteral(value string) bool {
 }
 
 func (self *_Scanner) Consume(kind rune, message string) (*tokens.Token, error) {
-	if self.curr.Kind() == kind {
+	if self.ptr.Iter.Curr.Kind() == kind {
 		self.Next()
-		return &self.prev, nil
+		return self.Prev().Ptr(), nil
 	}
 
-	return nil, self.curr.Error(message)
+	return nil, self.Curr().Error(message)
 }
 
 func (self *_Scanner) Scan() (*tokens.Token, error) {

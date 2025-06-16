@@ -23,7 +23,7 @@ func (self *Markdown) parseListItem(parser ast.Parser, scan *_Scanner) (*html.Li
 
 	t.Rollback()
 
-	for scan.curr.Kind() != Eof {
+	for scan.Curr().Kind() != Eof {
 		node, err := parser.ParseInline(scan.ptr)
 
 		if err != nil {

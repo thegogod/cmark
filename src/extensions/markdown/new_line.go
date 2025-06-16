@@ -12,7 +12,7 @@ func (self *Markdown) ParseNewLine(parser ast.Parser, ptr *tokens.Pointer) (ast.
 
 func (self *Markdown) parseNewLine(_ ast.Parser, scan *_Scanner) (html.Raw, error) {
 	if !scan.Match(NewLine) {
-		return nil, scan.curr.Error("expected newline")
+		return nil, scan.Curr().Error("expected newline")
 	}
 
 	if scan.Match(NewLine) {
@@ -25,7 +25,7 @@ func (self *Markdown) parseNewLine(_ ast.Parser, scan *_Scanner) (html.Raw, erro
 		}
 	}
 
-	curr := scan.curr.String()
+	curr := scan.Curr().String()
 
 	if curr == " " || curr == "\n" {
 		return nil, nil

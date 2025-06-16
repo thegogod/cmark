@@ -8,8 +8,30 @@ import (
 
 type AstElement []ast.Node
 
-func Ast(nodes ...ast.Node) AstElement {
-	return nodes
+func Ast(nodes ...ast.Node) *AstElement {
+	self := AstElement{}
+	self = append(self, nodes...)
+	return &self
+}
+
+func (self AstElement) GetSelector() string {
+	return ""
+}
+
+func (self AstElement) HasAttr(name string) bool {
+	return false
+}
+
+func (self AstElement) GetAttr(name string) string {
+	return ""
+}
+
+func (self AstElement) SetAttr(name string, value string) {
+	return
+}
+
+func (self AstElement) DelAttr(name string) {
+	return
 }
 
 func (self AstElement) HasId() bool {
@@ -20,15 +42,15 @@ func (self AstElement) GetId() string {
 	return ""
 }
 
-func (self *AstElement) SetId(id string) {
-
+func (self AstElement) SetId(id string) {
+	return
 }
 
-func (self *AstElement) DelId() {
-
+func (self AstElement) DelId() {
+	return
 }
 
-func (self AstElement) HasClass(classes ...string) bool {
+func (self AstElement) HasClass(name ...string) bool {
 	return false
 }
 
@@ -36,20 +58,20 @@ func (self AstElement) GetClass() []string {
 	return []string{}
 }
 
-func (self *AstElement) AddClass(name ...string) {
-
+func (self AstElement) AddClass(name ...string) {
+	return
 }
 
-func (self *AstElement) DelClass(name ...string) {
-
+func (self AstElement) DelClass(name ...string) {
+	return
 }
 
 func (self AstElement) GetStyles() maps.OMap[string, string] {
 	return maps.OMap[string, string]{}
 }
 
-func (self *AstElement) SetStyles(styles ...maps.KeyValue[string, string]) {
-
+func (self AstElement) SetStyles(styles ...maps.KeyValue[string, string]) {
+	return
 }
 
 func (self AstElement) HasStyle(name ...string) bool {
@@ -60,12 +82,12 @@ func (self AstElement) GetStyle(name string) string {
 	return ""
 }
 
-func (self *AstElement) SetStyle(name string, value string) {
-
+func (self AstElement) SetStyle(name string, value string) {
+	return
 }
 
-func (self *AstElement) DelStyle(name ...string) {
-
+func (self AstElement) DelStyle(name ...string) {
+	return
 }
 
 func (self AstElement) Count() int {
@@ -134,4 +156,12 @@ func (self AstElement) RenderPretty(scope *ast.Scope, indent string) []byte {
 	}
 
 	return value
+}
+
+func (self AstElement) GetById(id string) Node {
+	return nil
+}
+
+func (self AstElement) Select(query ...any) []Node {
+	return []Node{}
 }

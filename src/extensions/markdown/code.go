@@ -12,14 +12,14 @@ func (self *Markdown) ParseCode(parser ast.Parser, ptr *tokens.Pointer) (ast.Nod
 
 func (self *Markdown) parseCode(parser ast.Parser, scan *_Scanner) (*html.CodeElement, error) {
 	if !scan.MatchCount(BackQuote, 1) {
-		return nil, scan.curr.Error("expected '`'")
+		return nil, scan.Curr().Error("expected '`'")
 	}
 
 	code := html.Code()
 	text, err := self.parseTextUntil(BackQuote, parser, scan)
 
 	if text == nil {
-		return code, scan.curr.Error("expected closing '`'")
+		return code, scan.Curr().Error("expected closing '`'")
 	}
 
 	if err != nil {

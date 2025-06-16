@@ -12,7 +12,7 @@ func (self *Markdown) ParseUnorderedList(parser ast.Parser, ptr *tokens.Pointer)
 
 func (self *Markdown) parseUnorderedList(parser ast.Parser, scan *_Scanner) (*html.UnorderedListElement, error) {
 	if !scan.Match(Dash) || !scan.Match(Space) {
-		return nil, scan.curr.Error("expected '- '")
+		return nil, scan.Curr().Error("expected '- '")
 	}
 
 	self.listDepth++

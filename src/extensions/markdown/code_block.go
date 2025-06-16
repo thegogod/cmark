@@ -14,7 +14,7 @@ func (self *Markdown) ParseCodeBlock(parser ast.Parser, ptr *tokens.Pointer) (as
 
 func (self *Markdown) parseCodeBlock(parser ast.Parser, scan *_Scanner) (*html.PreElement, error) {
 	if !scan.MatchCount(BackQuote, 3) {
-		return nil, scan.curr.Error("expected '```'")
+		return nil, scan.Curr().Error("expected '```'")
 	}
 
 	code := html.Code()
@@ -34,7 +34,7 @@ func (self *Markdown) parseCodeBlock(parser ast.Parser, scan *_Scanner) (*html.P
 		node, err := self.parseText(parser, scan)
 
 		if node == nil {
-			return html.Pre(code), scan.curr.Error("expected closing '```'")
+			return html.Pre(code), scan.Curr().Error("expected closing '```'")
 		}
 
 		if err != nil {

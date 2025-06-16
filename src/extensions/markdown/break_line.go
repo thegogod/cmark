@@ -11,8 +11,8 @@ func (self *Markdown) ParseBreakLine(parser ast.Parser, ptr *tokens.Pointer) (as
 }
 
 func (self *Markdown) parseBreakLine(_ ast.Parser, scan *_Scanner) (*html.BreakLineElement, error) {
-	if !scan.MatchCount(Space, 2) && scan.curr.Kind() == NewLine {
-		return nil, scan.curr.Error("expected two spaces and a newline")
+	if !scan.MatchCount(Space, 2) && scan.Curr().Kind() == NewLine {
+		return nil, scan.Curr().Error("expected two spaces and a newline")
 	}
 
 	return html.Br(), nil

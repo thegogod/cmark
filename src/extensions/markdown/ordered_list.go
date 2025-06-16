@@ -12,7 +12,7 @@ func (self *Markdown) ParseOrderedList(parser ast.Parser, ptr *tokens.Pointer) (
 
 func (self *Markdown) parseOrderedList(parser ast.Parser, scan *_Scanner) (*html.OrderedListElement, error) {
 	if !scan.Match(Integer) || !scan.Match(Period) || scan.Match(Space) {
-		return nil, scan.curr.Error("expected '{int}. '")
+		return nil, scan.Curr().Error("expected '{int}. '")
 	}
 
 	self.listDepth++

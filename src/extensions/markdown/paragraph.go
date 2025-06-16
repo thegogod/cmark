@@ -14,7 +14,7 @@ func (self *Markdown) parseParagraph(parser ast.Parser, scan *_Scanner) (*html.P
 	paragraph := html.P()
 	buff := html.Raw{}
 
-	for scan.curr.Kind() != Eof {
+	for scan.Curr().Kind() != Eof {
 		node, err := parser.ParseInline(scan.ptr)
 
 		if node == nil {
@@ -26,7 +26,7 @@ func (self *Markdown) parseParagraph(parser ast.Parser, scan *_Scanner) (*html.P
 		}
 
 		if raw, ok := node.(html.Raw); ok && string(raw) == "\n" {
-			if scan.curr.Kind() == GreaterThan {
+			if scan.Curr().Kind() == GreaterThan {
 				break
 			}
 

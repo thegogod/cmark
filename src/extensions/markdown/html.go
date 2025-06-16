@@ -22,19 +22,19 @@ func (self *Markdown) parseHtml(parser ast.Parser, scan *_Scanner) (*html.Elemen
 	scan.NextWhile(Space, Tab)
 
 	for scan.Match(Text) || scan.Match(Underscore) || scan.Match(Dash) {
-		name = append(name, scan.prev.Bytes()...)
+		name = append(name, scan.Prev().Bytes()...)
 	}
 
 	el := html.Elem(string(name))
 	self.path = append(self.path, string(name))
 	depth := len(self.path)
 
-	for scan.NextWhile(Space, Tab) > 0 && scan.curr.Kind() == Text {
+	for scan.NextWhile(Space, Tab) > 0 && scan.Curr().Kind() == Text {
 		attr := []byte{}
 		value := []byte{}
 
 		for scan.Match(Text) || scan.Match(Underscore) || scan.Match(Dash) {
-			attr = append(attr, scan.prev.Bytes()...)
+			attr = append(attr, scan.Prev().Bytes()...)
 		}
 
 		if scan.Match(Equals) {
@@ -45,7 +45,7 @@ func (self *Markdown) parseHtml(parser ast.Parser, scan *_Scanner) (*html.Elemen
 			v, err := self.parseTextUntil(DoubleQuote, parser, scan)
 
 			if v == nil {
-				return el, scan.curr.Error("expected closing '\"'")
+				return el, scan.Curr().Error("expected closing '\"'")
 			}
 
 			if err != nil {
@@ -60,7 +60,7 @@ func (self *Markdown) parseHtml(parser ast.Parser, scan *_Scanner) (*html.Elemen
 
 	isVoid := false
 
-	if scan.curr.Kind() == Slash {
+	if scan.Curr().Kind() == Slash {
 		isVoid = true
 		el.Void()
 		scan.Next()
@@ -81,7 +81,7 @@ func (self *Markdown) parseHtml(parser ast.Parser, scan *_Scanner) (*html.Elemen
 			content, err := parser.ParseInline(scan.ptr)
 
 			if content == nil {
-				return el, scan.curr.Error("expected closing tag")
+				return el, scan.Curr().Error("expected closing tag")
 			}
 
 			if err != nil {
@@ -106,7 +106,7 @@ func (self *Markdown) parseClosingTag(scan *_Scanner, name []byte, depth int) bo
 	tag := []byte{}
 
 	for scan.Match(Text) || scan.Match(Underscore) || scan.Match(Dash) {
-		tag = append(tag, scan.prev.Bytes()...)
+		tag = append(tag, scan.Prev().Bytes()...)
 	}
 
 	if !bytes.Equal(tag, name) {

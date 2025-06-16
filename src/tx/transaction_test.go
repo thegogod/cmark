@@ -41,4 +41,27 @@ func TestTransaction(t *testing.T) {
 			t.FailNow()
 		}
 	})
+
+	t.Run("should rollback compound", func(t *testing.T) {
+		type A struct {
+			A int
+		}
+
+		type B struct {
+			B string
+		}
+
+		a := A{70}
+		b := B{"hello world"}
+
+		tx := tx.Compound(tx.New(&a), tx.New(&b))
+
+		a.A = 90
+		b.B = "lol"
+		tx.Rollback()
+
+		if a.A != 70 || b.B != "hello world" {
+			t.FailNow()
+		}
+	})
 }
