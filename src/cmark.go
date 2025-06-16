@@ -11,6 +11,7 @@ import (
 	"github.com/thegogod/cmark/html"
 	"github.com/thegogod/cmark/logging"
 	"github.com/thegogod/cmark/tokens"
+	"github.com/thegogod/cmark/tx"
 )
 
 type CMark struct {
@@ -18,7 +19,7 @@ type CMark struct {
 	extensions []Extension
 }
 
-func New(extensions ...Extension) CMark {
+func New(extensions ...Extension) *CMark {
 	exists := slices.ContainsFunc(extensions, func(ext Extension) bool {
 		return ext.Name() == "markdown"
 	})
@@ -27,15 +28,15 @@ func New(extensions ...Extension) CMark {
 		extensions = append(extensions, markdown.New())
 	}
 
-	return CMark{nil, extensions}
+	return &CMark{nil, extensions}
 }
 
-func (self CMark) WithLogging(logger logging.Logger) CMark {
+func (self *CMark) WithLogging(logger logging.Logger) *CMark {
 	self.logger = logger
 	return self
 }
 
-func (self CMark) Parse(src []byte) (ast.Node, error) {
+func (self *CMark) Parse(src []byte) (ast.Node, error) {
 	document := html.New()
 	ptr := tokens.Ptr(src)
 	ptr.Next()
@@ -61,7 +62,7 @@ func (self CMark) Parse(src []byte) (ast.Node, error) {
 	return document, nil
 }
 
-func (self CMark) ParseDir(path string) ([]ast.Node, error) {
+func (self *CMark) ParseDir(path string) ([]ast.Node, error) {
 	self.println(path)
 	entries, err := os.ReadDir(path)
 
@@ -96,7 +97,7 @@ func (self CMark) ParseDir(path string) ([]ast.Node, error) {
 	return nodes, nil
 }
 
-func (self CMark) ParseFile(path string) (ast.Node, error) {
+func (self *CMark) ParseFile(path string) (ast.Node, error) {
 	self.println(path)
 	src, err := os.ReadFile(path)
 
@@ -107,7 +108,7 @@ func (self CMark) ParseFile(path string) (ast.Node, error) {
 	return self.Parse(src)
 }
 
-func (self CMark) ParseBlock(ptr *tokens.Pointer) (ast.Node, error) {
+func (self *CMark) ParseBlock(ptr *tokens.Pointer) (ast.Node, error) {
 	if ptr.Eof() {
 		return nil, nil
 	}
@@ -115,7 +116,7 @@ func (self CMark) ParseBlock(ptr *tokens.Pointer) (ast.Node, error) {
 	var node ast.Node = nil
 	var err error = nil
 
-	// save
+	tx := tx.New(ptr)
 
 	for _, ext := range self.extensions {
 		node, err = ext.ParseBlock(self, ptr)
@@ -124,13 +125,13 @@ func (self CMark) ParseBlock(ptr *tokens.Pointer) (ast.Node, error) {
 			break
 		}
 
-		// revert save
+		tx.Rollback()
 	}
 
 	return node, err
 }
 
-func (self CMark) ParseInline(ptr *tokens.Pointer) (ast.Node, error) {
+func (self *CMark) ParseInline(ptr *tokens.Pointer) (ast.Node, error) {
 	if ptr.Eof() {
 		return nil, nil
 	}
@@ -138,7 +139,7 @@ func (self CMark) ParseInline(ptr *tokens.Pointer) (ast.Node, error) {
 	var node ast.Node = nil
 	var err error = nil
 
-	// save
+	tx := tx.New(ptr)
 
 	for _, ext := range self.extensions {
 		node, err = ext.ParseInline(self, ptr)
@@ -147,13 +148,13 @@ func (self CMark) ParseInline(ptr *tokens.Pointer) (ast.Node, error) {
 			break
 		}
 
-		// revert save
+		tx.Rollback()
 	}
 
 	return node, err
 }
 
-func (self CMark) ParseSyntax(ptr *tokens.Pointer, extension string, name string) (ast.Node, error) {
+func (self *CMark) ParseSyntax(ptr *tokens.Pointer, extension string, name string) (ast.Node, error) {
 	self.printf("parsing '%s->%s'...", extension, name)
 	self.print("done\n")
 	return nil, nil
