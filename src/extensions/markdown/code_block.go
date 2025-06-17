@@ -12,12 +12,12 @@ func (self *Markdown) ParseCodeBlock(parser html.Parser, ptr *tokens.Pointer) (h
 }
 
 func (self *Markdown) parseCodeBlock(parser html.Parser, scan *_Scanner) (*html.PreElement, error) {
+	code := html.Code()
+
 	if !scan.MatchCount(BackQuote, 3) {
-		return nil, scan.Curr().Error("expected '```'")
+		return html.Pre(code), scan.Curr().Error("expected '```'")
 	}
 
-	log.Debugln("code_block")
-	code := html.Code()
 	lang, err := self.parseTextUntil(NewLine, parser, scan)
 
 	if lang == nil || err != nil {
@@ -54,5 +54,6 @@ func (self *Markdown) parseCodeBlock(parser html.Parser, scan *_Scanner) (*html.
 		code.Push(node)
 	}
 
+	log.Debugln("code_block")
 	return html.Pre(code), nil
 }

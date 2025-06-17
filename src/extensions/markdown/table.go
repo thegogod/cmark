@@ -12,12 +12,12 @@ func (self *Markdown) ParseTable(parser html.Parser, ptr *tokens.Pointer) (html.
 }
 
 func (self *Markdown) parseTable(parser html.Parser, scan *_Scanner) (*html.TableElement, error) {
+	table := html.Table()
+
 	if !scan.MatchCount(Pipe, 1) {
-		return nil, scan.Curr().Error("expected '|'")
+		return table, scan.Curr().Error("expected '|'")
 	}
 
-	log.Debugln("table")
-	table := html.Table()
 	columns := []*html.TableCellElement{}
 
 	for !scan.Match(NewLine) {
@@ -165,6 +165,7 @@ func (self *Markdown) parseTable(parser html.Parser, scan *_Scanner) (*html.Tabl
 		}
 	}
 
+	log.Debugln("table")
 	table.Push(html.TBody(html.Tr(rows...)))
 	return table, nil
 }

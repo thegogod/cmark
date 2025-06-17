@@ -10,12 +10,11 @@ func (self *Markdown) ParseBoldAlt(parser html.Parser, ptr *tokens.Pointer) (htm
 }
 
 func (self *Markdown) parseBoldAlt(parser html.Parser, scan *_Scanner) (*html.StrongElement, error) {
-	if !scan.MatchCount(Underscore, 2) {
-		return nil, scan.Curr().Error("expected '__'")
-	}
-
-	log.Debugln("bold_alt")
 	el := html.Strong()
+
+	if !scan.MatchCount(Underscore, 2) {
+		return el, scan.Curr().Error("expected '__'")
+	}
 
 	for !scan.MatchCount(Underscore, 2) {
 		node, err := parser.ParseInline(scan.ptr)
@@ -31,5 +30,6 @@ func (self *Markdown) parseBoldAlt(parser html.Parser, scan *_Scanner) (*html.St
 		el.Push(node)
 	}
 
+	log.Debugln("bold_alt")
 	return el, nil
 }

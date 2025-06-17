@@ -10,12 +10,12 @@ func (self *Markdown) ParseCode(parser html.Parser, ptr *tokens.Pointer) (html.N
 }
 
 func (self *Markdown) parseCode(parser html.Parser, scan *_Scanner) (*html.CodeElement, error) {
+	code := html.Code()
+
 	if !scan.MatchCount(BackQuote, 1) {
-		return nil, scan.Curr().Error("expected '`'")
+		return code, scan.Curr().Error("expected '`'")
 	}
 
-	log.Debugln("code")
-	code := html.Code()
 	text, err := self.parseTextUntil(BackQuote, parser, scan)
 
 	if text == nil {
@@ -26,6 +26,7 @@ func (self *Markdown) parseCode(parser html.Parser, scan *_Scanner) (*html.CodeE
 		return code, err
 	}
 
+	log.Debugln("code")
 	code.Push(text)
 	return code, nil
 }

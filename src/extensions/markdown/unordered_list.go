@@ -10,13 +10,13 @@ func (self *Markdown) ParseUnorderedList(parser html.Parser, ptr *tokens.Pointer
 }
 
 func (self *Markdown) parseUnorderedList(parser html.Parser, scan *_Scanner) (*html.UnorderedListElement, error) {
-	if !scan.Match(Dash) || !scan.Match(Space) {
-		return nil, scan.Curr().Error("expected '- '")
+	ul := html.Ul()
+
+	if !(scan.Match(Dash) && scan.Match(Space)) {
+		return ul, scan.Curr().Error("expected '- '")
 	}
 
-	log.Debugln("unordered_list")
 	self.listDepth++
-	ul := html.Ul()
 
 	for {
 		node, err := self.parseListItem(parser, scan)
@@ -37,6 +37,7 @@ func (self *Markdown) parseUnorderedList(parser html.Parser, scan *_Scanner) (*h
 		}
 	}
 
+	log.Debugln("unordered_list")
 	self.listDepth--
 	return ul, nil
 }

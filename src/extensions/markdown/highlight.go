@@ -10,12 +10,11 @@ func (self *Markdown) ParseHighlight(parser html.Parser, ptr *tokens.Pointer) (h
 }
 
 func (self *Markdown) parseHighlight(parser html.Parser, scan *_Scanner) (*html.MarkElement, error) {
-	if !scan.MatchCount(EqualsEquals, 1) {
-		return nil, scan.Curr().Error("expected '=='")
-	}
-
-	log.Debugln("highlight")
 	mark := html.Mark()
+
+	if !scan.MatchCount(EqualsEquals, 1) {
+		return mark, scan.Curr().Error("expected '=='")
+	}
 
 	for !scan.MatchCount(EqualsEquals, 1) {
 		node, err := parser.ParseInline(scan.ptr)
@@ -31,5 +30,6 @@ func (self *Markdown) parseHighlight(parser html.Parser, scan *_Scanner) (*html.
 		mark.Push(node)
 	}
 
+	log.Debugln("highlight")
 	return mark, nil
 }

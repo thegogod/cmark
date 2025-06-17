@@ -12,12 +12,15 @@ func Ptr(src []byte) *Pointer {
 		Src:   src,
 		Start: Position{},
 		End:   Position{},
-		Iter:  Iterator{},
+		Iter: Iterator{
+			Prev: Token{kind: -1},
+			Curr: Token{kind: -1},
+		},
 	}
 }
 
 func (self Pointer) Sof() bool {
-	return self.Start.Index == 0
+	return self.Iter.Curr.kind == -1
 }
 
 func (self Pointer) Eof() bool {

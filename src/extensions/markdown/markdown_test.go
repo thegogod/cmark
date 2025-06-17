@@ -10,6 +10,8 @@ import (
 )
 
 func TestMarkdown(t *testing.T) {
+	// t.SkipNow()
+
 	RunDir(t, filepath.Join("testcases"), func(t *testing.T, md []byte, html []byte) {
 		parser := cmark.New()
 		node, err := parser.Parse(md)

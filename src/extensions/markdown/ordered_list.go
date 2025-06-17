@@ -10,13 +10,13 @@ func (self *Markdown) ParseOrderedList(parser html.Parser, ptr *tokens.Pointer) 
 }
 
 func (self *Markdown) parseOrderedList(parser html.Parser, scan *_Scanner) (*html.OrderedListElement, error) {
-	if !scan.Match(Integer) || !scan.Match(Period) || scan.Match(Space) {
+	ol := html.Ol()
+
+	if !(scan.Match(Integer) && scan.Match(Period) && scan.Match(Space)) {
 		return nil, scan.Curr().Error("expected '{int}. '")
 	}
 
-	log.Debugln("ordered_list")
 	self.listDepth++
-	ol := html.Ol()
 
 	for {
 		node, err := self.parseListItem(parser, scan)
@@ -37,6 +37,7 @@ func (self *Markdown) parseOrderedList(parser html.Parser, scan *_Scanner) (*htm
 		}
 	}
 
+	log.Debugln("ordered_list")
 	self.listDepth--
 	return ol, nil
 }

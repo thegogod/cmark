@@ -10,12 +10,11 @@ func (self *Markdown) ParseItalic(parser html.Parser, ptr *tokens.Pointer) (html
 }
 
 func (self *Markdown) parseItalic(parser html.Parser, scan *_Scanner) (*html.ItalicElement, error) {
-	if !scan.MatchCount(Asterisk, 1) {
-		return nil, scan.Curr().Error("expected '*'")
-	}
-
-	log.Debugln("italic")
 	italic := html.I()
+
+	if !scan.MatchCount(Asterisk, 1) {
+		return italic, scan.Curr().Error("expected '*'")
+	}
 
 	for !scan.Match(Asterisk) {
 		node, err := parser.ParseInline(scan.ptr)
@@ -31,5 +30,6 @@ func (self *Markdown) parseItalic(parser html.Parser, scan *_Scanner) (*html.Ita
 		italic.Push(node)
 	}
 
+	log.Debugln("italic")
 	return italic, nil
 }

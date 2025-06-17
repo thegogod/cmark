@@ -10,7 +10,6 @@ func (self *Markdown) ParseParagraph(parser html.Parser, ptr *tokens.Pointer) (h
 }
 
 func (self *Markdown) parseParagraph(parser html.Parser, scan *_Scanner) (*html.ParagraphElement, error) {
-	log.Debugln("paragraph")
 	paragraph := html.P()
 	buff := html.Raw{}
 
@@ -31,6 +30,11 @@ func (self *Markdown) parseParagraph(parser html.Parser, scan *_Scanner) (*html.
 			}
 
 			buff = append(buff, raw...)
+
+			if len(buff) > 1 {
+				break
+			}
+
 			continue
 		}
 
@@ -46,5 +50,6 @@ func (self *Markdown) parseParagraph(parser html.Parser, scan *_Scanner) (*html.
 		return nil, nil
 	}
 
+	log.Debugln("paragraph")
 	return paragraph, nil
 }

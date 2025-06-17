@@ -76,7 +76,7 @@ func (self ConsoleLogger) Log(level Level, v ...any) {
 }
 
 func (self ConsoleLogger) Logf(level Level, format string, v ...any) {
-	if self.Disabled {
+	if self.Disabled || level > self.Level {
 		return
 	}
 
@@ -107,17 +107,17 @@ func (self ConsoleLogger) Logf(level Level, format string, v ...any) {
 }
 
 func (self ConsoleLogger) Logln(level Level, v ...any) {
-	if self.Disabled {
+	if self.Disabled || level > self.Level {
 		return
 	}
 
 	lvl := Text("[" + level.String() + "]")
 	name := Text(self.Name)
 
-	switch self.Level {
+	switch level {
 	case Debug:
-		lvl = lvl.BlueForeground().Bold()
-		name = name.BlueForeground().Bold()
+		lvl = lvl.MagentaForeground().Bold()
+		name = name.MagentaForeground().Bold()
 	case Info:
 		lvl = lvl.CyanForeground().Bold()
 		name = name.CyanForeground().Bold()

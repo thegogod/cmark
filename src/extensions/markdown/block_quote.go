@@ -10,13 +10,13 @@ func (self *Markdown) ParseBlockQuote(parser html.Parser, ptr *tokens.Pointer) (
 }
 
 func (self *Markdown) parseBlockQuote(parser html.Parser, scan *_Scanner) (*html.BlockQuoteElement, error) {
+	el := html.BlockQuote()
+
 	if !scan.Match(GreaterThan) {
-		return nil, scan.Curr().Error("expected '>'")
+		return el, scan.Curr().Error("expected '>'")
 	}
 
-	log.Debugln("block_quote")
 	self.blockQuoteDepth++
-	el := html.BlockQuote()
 
 	for {
 		node, err := parser.ParseBlock(scan.ptr)
@@ -33,6 +33,7 @@ func (self *Markdown) parseBlockQuote(parser html.Parser, scan *_Scanner) (*html
 		}
 	}
 
+	log.Debugln("block_quote")
 	self.blockQuoteDepth--
 	return el, nil
 }

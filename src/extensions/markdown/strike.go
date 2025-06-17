@@ -10,12 +10,11 @@ func (self *Markdown) ParseStrike(parser html.Parser, ptr *tokens.Pointer) (html
 }
 
 func (self *Markdown) parseStrike(parser html.Parser, scan *_Scanner) (*html.StrikeElement, error) {
-	if !scan.MatchCount(Tilde, 1) {
-		return nil, scan.Curr().Error("expected '~'")
-	}
-
-	log.Debugln("strike")
 	strike := html.S()
+
+	if !scan.MatchCount(Tilde, 1) {
+		return strike, scan.Curr().Error("expected '~'")
+	}
 
 	for !scan.Match(Tilde) {
 		node, err := parser.ParseInline(scan.ptr)
@@ -31,5 +30,6 @@ func (self *Markdown) parseStrike(parser html.Parser, scan *_Scanner) (*html.Str
 		strike.Push(node)
 	}
 
+	log.Debugln("strike")
 	return strike, nil
 }

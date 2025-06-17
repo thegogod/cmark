@@ -10,12 +10,11 @@ func (self *Markdown) ParseLink(parser html.Parser, ptr *tokens.Pointer) (html.N
 }
 
 func (self *Markdown) parseLink(parser html.Parser, scan *_Scanner) (*html.AnchorElement, error) {
-	if !scan.Match(LeftBracket) {
-		return nil, scan.Curr().Error("expected '['")
-	}
-
-	log.Debugln("link")
 	link := html.A()
+
+	if !scan.Match(LeftBracket) {
+		return link, scan.Curr().Error("expected '['")
+	}
 
 	for !scan.Match(RightBracket) {
 		node, err := parser.ParseInline(scan.ptr)
@@ -37,6 +36,7 @@ func (self *Markdown) parseLink(parser html.Parser, scan *_Scanner) (*html.Ancho
 		return link, err
 	}
 
+	log.Debugln("link")
 	link.WithHref(string(node))
 	return link, nil
 }

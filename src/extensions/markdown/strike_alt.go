@@ -10,12 +10,11 @@ func (self *Markdown) ParseStrikeAlt(parser html.Parser, ptr *tokens.Pointer) (h
 }
 
 func (self *Markdown) parseStrikeAlt(parser html.Parser, scan *_Scanner) (*html.StrikeElement, error) {
-	if !scan.MatchCount(Tilde, 2) {
-		return nil, scan.Curr().Error("expected '~~'")
-	}
-
-	log.Debugln("strike_alt")
 	strike := html.S()
+
+	if !scan.MatchCount(Tilde, 2) {
+		return strike, scan.Curr().Error("expected '~~'")
+	}
 
 	for !scan.MatchCount(Tilde, 2) {
 		node, err := parser.ParseInline(scan.ptr)
@@ -31,5 +30,6 @@ func (self *Markdown) parseStrikeAlt(parser html.Parser, scan *_Scanner) (*html.
 		strike.Push(node)
 	}
 
+	log.Debugln("strike_alt")
 	return strike, nil
 }

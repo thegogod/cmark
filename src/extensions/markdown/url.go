@@ -6,7 +6,6 @@ import (
 
 	"github.com/thegogod/cmark/html"
 	"github.com/thegogod/cmark/tokens"
-	"github.com/thegogod/cmark/tx"
 )
 
 func (self *Markdown) ParseUrl(parser html.Parser, ptr *tokens.Pointer) (html.Node, error) {
@@ -14,21 +13,16 @@ func (self *Markdown) ParseUrl(parser html.Parser, ptr *tokens.Pointer) (html.No
 }
 
 func (self *Markdown) parseUrl(parser html.Parser, scan *_Scanner) (*html.AnchorElement, error) {
-	tx := tx.New(scan)
-	text, err := self.parseText(parser, scan)
-
-	if text == nil || err != nil {
-		defer tx.Rollback()
-		return nil, scan.Curr().Error("expected text")
-	}
-
-	if !strings.HasPrefix(string(text), "http") {
-		defer tx.Rollback()
-		return nil, scan.Curr().Error("expected 'http' prefix")
-	}
-
 	link := html.A()
-	protocol, _ := self.parseText(parser, scan)
+	protocol, err := self.parseText(parser, scan)
+
+	if protocol == nil || err != nil {
+		return link, scan.Curr().Error("expected text")
+	}
+
+	if !strings.HasPrefix(string(protocol), "http") {
+		return link, scan.Curr().Error("expected 'http' prefix")
+	}
 
 	if _, err := scan.Consume(Colon, "expected ':'"); err != nil {
 		return link, err

@@ -10,10 +10,12 @@ func (self *Markdown) ParseHorizontalRule(parser html.Parser, ptr *tokens.Pointe
 }
 
 func (self *Markdown) parseHorizontalRule(_ html.Parser, scan *_Scanner) (*html.HorizontalRuleElement, error) {
+	el := html.Hr()
+
 	if !scan.MatchCount(Dash, 3) {
-		return nil, scan.Curr().Error("expected '---'")
+		return el, scan.Curr().Error("expected '---'")
 	}
 
 	log.Debugln("horizontal_rule")
-	return html.Hr(), nil
+	return el, nil
 }

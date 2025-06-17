@@ -11,12 +11,11 @@ func (self *Markdown) ParseEmoji(parser html.Parser, ptr *tokens.Pointer) (html.
 }
 
 func (self *Markdown) parseEmoji(parser html.Parser, scan *_Scanner) (html.Raw, error) {
-	if !scan.MatchCount(Colon, 1) {
-		return nil, scan.Curr().Error("expected ':'")
-	}
-
-	log.Debugln("emoji")
 	alias := html.Raw{}
+
+	if !scan.MatchCount(Colon, 1) {
+		return alias, scan.Curr().Error("expected ':'")
+	}
 
 	for !scan.Match(Colon) {
 		node, err := self.parseText(parser, scan)
@@ -38,5 +37,6 @@ func (self *Markdown) parseEmoji(parser html.Parser, scan *_Scanner) (html.Raw, 
 		return alias, scan.Curr().Error("emoji alias not found")
 	}
 
+	log.Debugln("emoji")
 	return html.Raw(emoji.Emoji), nil
 }

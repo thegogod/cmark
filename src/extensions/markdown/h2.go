@@ -10,12 +10,11 @@ func (self *Markdown) ParseH2(parser html.Parser, ptr *tokens.Pointer) (html.Nod
 }
 
 func (self *Markdown) parseH2(parser html.Parser, scan *_Scanner) (*html.HeadingElement, error) {
-	if !scan.MatchCount(Hash, 2) || !scan.Match(Space) {
-		return nil, scan.Curr().Error("expected '## '")
-	}
-
-	log.Debugln("h2")
 	heading := html.H2()
+
+	if !(scan.MatchCount(Hash, 2) && scan.Match(Space)) {
+		return heading, scan.Curr().Error("expected '## '")
+	}
 
 	for scan.Curr().Kind() != Eof && scan.Curr().Kind() != NewLine {
 		node, err := parser.ParseInline(scan.ptr)
@@ -27,5 +26,6 @@ func (self *Markdown) parseH2(parser html.Parser, scan *_Scanner) (*html.Heading
 		heading.Push(node)
 	}
 
+	log.Debugln("h2")
 	return heading, nil
 }

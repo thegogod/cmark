@@ -10,12 +10,11 @@ func (self *Markdown) ParseH4(parser html.Parser, ptr *tokens.Pointer) (html.Nod
 }
 
 func (self *Markdown) parseH4(parser html.Parser, scan *_Scanner) (*html.HeadingElement, error) {
-	if !scan.MatchCount(Hash, 4) || !scan.Match(Space) {
-		return nil, scan.Curr().Error("expected '#### '")
-	}
-
-	log.Debugln("h4")
 	heading := html.H4()
+
+	if !(scan.MatchCount(Hash, 4) && scan.Match(Space)) {
+		return heading, scan.Curr().Error("expected '#### '")
+	}
 
 	for scan.Curr().Kind() != Eof && scan.Curr().Kind() != NewLine {
 		node, err := parser.ParseInline(scan.ptr)
@@ -27,5 +26,6 @@ func (self *Markdown) parseH4(parser html.Parser, scan *_Scanner) (*html.Heading
 		heading.Push(node)
 	}
 
+	log.Debugln("h4")
 	return heading, nil
 }

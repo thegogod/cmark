@@ -34,10 +34,9 @@ func New(extensions ...Extension) *CMark {
 func (self *CMark) Parse(src []byte) (html.Node, error) {
 	document := html.Fragment()
 	ptr := tokens.Ptr(src)
-	ptr.Next()
 
 	for {
-		if ptr.Eof() {
+		if ptr.Iter.Curr.Kind() == 0 {
 			break
 		}
 
@@ -51,13 +50,7 @@ func (self *CMark) Parse(src []byte) (html.Node, error) {
 			continue
 		}
 
-		htmlNode, ok := node.(html.Node)
-
-		if !ok {
-			continue
-		}
-
-		document.Push(htmlNode)
+		document.Push(node)
 	}
 
 	return document, nil
@@ -110,7 +103,7 @@ func (self *CMark) ParseFile(path string) (html.Node, error) {
 }
 
 func (self *CMark) ParseBlock(ptr *tokens.Pointer) (html.Node, error) {
-	if ptr.Eof() {
+	if ptr.Iter.Curr.Kind() == 0 {
 		return nil, nil
 	}
 
@@ -127,19 +120,13 @@ func (self *CMark) ParseBlock(ptr *tokens.Pointer) (html.Node, error) {
 		}
 
 		tx.Rollback()
-
-		if err == nil {
-			continue
-		}
-
-		log.Debugf("[%s] %s", ext.Name(), err.Error())
 	}
 
 	return node, err
 }
 
 func (self *CMark) ParseInline(ptr *tokens.Pointer) (html.Node, error) {
-	if ptr.Eof() {
+	if ptr.Iter.Curr.Kind() == 0 {
 		return nil, nil
 	}
 
@@ -156,12 +143,6 @@ func (self *CMark) ParseInline(ptr *tokens.Pointer) (html.Node, error) {
 		}
 
 		tx.Rollback()
-
-		if err == nil {
-			continue
-		}
-
-		log.Debugf("[%s] %s", ext.Name(), err.Error())
 	}
 
 	return node, err

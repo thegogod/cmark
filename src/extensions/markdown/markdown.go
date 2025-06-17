@@ -26,12 +26,10 @@ func (self *Markdown) Name() string {
 }
 
 func (self *Markdown) ParseBlock(parser html.Parser, ptr *tokens.Pointer) (html.Node, error) {
-	log.Debugln("block")
 	return self.parseBlock(parser, NewScanner(ptr))
 }
 
 func (self *Markdown) ParseInline(parser html.Parser, ptr *tokens.Pointer) (html.Node, error) {
-	log.Debugln("inline")
 	return self.parseInline(parser, NewScanner(ptr))
 }
 
@@ -58,10 +56,10 @@ func (self *Markdown) parseBlock(parser html.Parser, scan *_Scanner) (html.Node,
 	}
 
 	if scan.Match(NewLine) {
-		return self.parseBlock(parser, scan)
+		return parser.ParseBlock(scan.ptr)
 	}
 
-	tx := tx.Compound(tx.New(scan.ptr), tx.New(scan))
+	tx := tx.Compound(tx.New(self), tx.New(scan.ptr))
 	node, err = self.parseHtml(parser, scan)
 
 	if err != nil {
@@ -129,6 +127,7 @@ func (self *Markdown) parseBlock(parser html.Parser, scan *_Scanner) (html.Node,
 		node, err = self.parseParagraph(parser, scan)
 	}
 
+	log.Debugln("block")
 	return node, err
 }
 
@@ -140,7 +139,7 @@ func (self *Markdown) parseInline(parser html.Parser, scan *_Scanner) (html.Node
 	var node html.Node = nil
 	var err error = nil
 
-	tx := tx.Compound(tx.New(scan.ptr), tx.New(scan))
+	tx := tx.Compound(tx.New(self), tx.New(scan.ptr))
 	node, err = self.parseHtml(parser, scan)
 
 	if err != nil {
@@ -213,11 +212,16 @@ func (self *Markdown) parseInline(parser html.Parser, scan *_Scanner) (html.Node
 		node, err = self.parseNewLine(parser, scan)
 	}
 
+	if node == nil && err == nil {
+		return nil, nil
+	}
+
 	if err != nil {
 		tx.Rollback()
 	}
 
 	if node == nil || err != nil {
+		log.Debugln("text")
 		text, texterr := self.parseText(parser, scan)
 
 		if text != nil {
@@ -227,6 +231,7 @@ func (self *Markdown) parseInline(parser html.Parser, scan *_Scanner) (html.Node
 		err = texterr
 	}
 
+	log.Debugln("inline", scan.ptr.Start.String(), scan.ptr.End.String())
 	return node, err
 }
 

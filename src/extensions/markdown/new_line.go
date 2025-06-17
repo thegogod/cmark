@@ -10,12 +10,10 @@ func (self *Markdown) ParseNewLine(parser html.Parser, ptr *tokens.Pointer) (htm
 }
 
 func (self *Markdown) parseNewLine(_ html.Parser, scan *_Scanner) (html.Raw, error) {
-	if !scan.Match(NewLine) {
-		return nil, scan.Curr().Error("expected newline")
-	}
+	el := html.Raw("\n")
 
-	if scan.Match(NewLine) {
-		return nil, nil
+	if !scan.Match(NewLine) {
+		return el, scan.Curr().Error("expected newline")
 	}
 
 	for range self.blockQuoteDepth {
@@ -25,11 +23,5 @@ func (self *Markdown) parseNewLine(_ html.Parser, scan *_Scanner) (html.Raw, err
 	}
 
 	log.Debugln("new_line")
-	curr := scan.Curr().String()
-
-	if curr == " " || curr == "\n" {
-		return nil, nil
-	}
-
-	return html.Raw("\n"), nil
+	return el, nil
 }

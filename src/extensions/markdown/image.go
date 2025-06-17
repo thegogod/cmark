@@ -10,12 +10,11 @@ func (self *Markdown) ParseImage(parser html.Parser, ptr *tokens.Pointer) (html.
 }
 
 func (self *Markdown) parseImage(parser html.Parser, scan *_Scanner) (*html.ImageElement, error) {
-	if !scan.Match(Bang) {
-		return nil, scan.Curr().Error("expected '!'")
-	}
-
-	log.Debugln("image")
 	image := html.Img()
+
+	if !scan.Match(Bang) {
+		return image, scan.Curr().Error("expected '!'")
+	}
 
 	if _, err := scan.Consume(LeftBracket, "expected '['"); err != nil {
 		return image, err
@@ -39,6 +38,7 @@ func (self *Markdown) parseImage(parser html.Parser, scan *_Scanner) (*html.Imag
 		return image, err
 	}
 
+	log.Debugln("image")
 	image.WithSrc(string(node))
 	return image, nil
 }

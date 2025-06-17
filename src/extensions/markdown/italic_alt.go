@@ -10,12 +10,11 @@ func (self *Markdown) ParseItalicAlt(parser html.Parser, ptr *tokens.Pointer) (h
 }
 
 func (self *Markdown) parseItalicAlt(parser html.Parser, scan *_Scanner) (*html.ItalicElement, error) {
-	if !scan.MatchCount(Underscore, 1) {
-		return nil, scan.Curr().Error("expected '_'")
-	}
-
-	log.Debugln("italic_alt")
 	italic := html.I()
+
+	if !scan.MatchCount(Underscore, 1) {
+		return italic, scan.Curr().Error("expected '_'")
+	}
 
 	for !scan.Match(Underscore) {
 		node, err := parser.ParseInline(scan.ptr)
@@ -31,5 +30,6 @@ func (self *Markdown) parseItalicAlt(parser html.Parser, scan *_Scanner) (*html.
 		italic.Push(node)
 	}
 
+	log.Debugln("italic_alt")
 	return italic, nil
 }

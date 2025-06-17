@@ -13,10 +13,16 @@ type _Scanner struct {
 }
 
 func NewScanner(ptr *tokens.Pointer, types ...func(ptr *tokens.Pointer) (*tokens.Token, error)) *_Scanner {
-	return &_Scanner{
+	self := &_Scanner{
 		ptr:   ptr,
 		types: append(types, tokenScanners...),
 	}
+
+	if ptr.Sof() {
+		self.Next()
+	}
+
+	return self
 }
 
 func (self _Scanner) Prev() tokens.Token {
@@ -49,7 +55,7 @@ func (self *_Scanner) NextWhile(kind ...rune) int {
 }
 
 func (self *_Scanner) Match(kind ...rune) bool {
-	tx := tx.New(self)
+	tx := tx.New(self.ptr)
 
 	for _, k := range kind {
 		if self.Curr().Kind() != k {
@@ -64,7 +70,7 @@ func (self *_Scanner) Match(kind ...rune) bool {
 }
 
 func (self *_Scanner) MatchCount(kind rune, count int) bool {
-	tx := tx.New(self)
+	tx := tx.New(self.ptr)
 
 	for range count {
 		if !self.Match(kind) {
@@ -82,7 +88,7 @@ func (self *_Scanner) MatchCount(kind rune, count int) bool {
 }
 
 func (self *_Scanner) MatchLiteral(value string) bool {
-	tx := tx.New(self)
+	tx := tx.New(self.ptr)
 	i := 0
 
 	for i < len(value) {
@@ -109,7 +115,7 @@ func (self *_Scanner) MatchLiteral(value string) bool {
 }
 
 func (self *_Scanner) Consume(kind rune, message string) (*tokens.Token, error) {
-	if self.ptr.Iter.Curr.Kind() == kind {
+	if self.Curr().Kind() == kind {
 		self.Next()
 		return self.Prev().Ptr(), nil
 	}
@@ -120,7 +126,7 @@ func (self *_Scanner) Consume(kind rune, message string) (*tokens.Token, error) 
 func (self *_Scanner) Scan() (*tokens.Token, error) {
 	self.ptr.Start = self.ptr.End
 	self.ptr.Next()
-	tx := tx.New(self)
+	tx := tx.New(self.ptr)
 
 	for _, tokenType := range self.types {
 		token, err := tokenType(self.ptr)

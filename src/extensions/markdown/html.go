@@ -13,11 +13,16 @@ func (self *Markdown) ParseHtml(parser html.Parser, ptr *tokens.Pointer) (html.N
 }
 
 func (self *Markdown) parseHtml(parser html.Parser, scan *_Scanner) (*html.Element, error) {
+	el := html.Elem("")
+
+	if !scan.Match(LessThan) {
+		return el, scan.Curr().Error("expected '<'")
+	}
+
 	if self.path == nil {
 		self.path = []string{}
 	}
 
-	log.Debugln("html")
 	name := []byte{}
 	scan.NextWhile(Space, Tab)
 
@@ -25,7 +30,7 @@ func (self *Markdown) parseHtml(parser html.Parser, scan *_Scanner) (*html.Eleme
 		name = append(name, scan.Prev().Bytes()...)
 	}
 
-	el := html.Elem(string(name))
+	el = html.Elem(string(name))
 	self.path = append(self.path, string(name))
 	depth := len(self.path)
 
@@ -73,11 +78,13 @@ func (self *Markdown) parseHtml(parser html.Parser, scan *_Scanner) (*html.Eleme
 	if !isVoid {
 		for {
 			scan.NextWhile(NewLine, Tab)
+			tx := tx.New(scan.ptr)
 
 			if self.parseClosingTag(scan, name, depth) {
 				break
 			}
 
+			tx.Rollback()
 			content, err := parser.ParseInline(scan.ptr)
 
 			if content == nil {
@@ -92,6 +99,7 @@ func (self *Markdown) parseHtml(parser html.Parser, scan *_Scanner) (*html.Eleme
 		}
 	}
 
+	log.Debugln("html")
 	self.path = self.path[:len(self.path)-1]
 	return el, nil
 }
@@ -101,7 +109,6 @@ func (self *Markdown) parseClosingTag(scan *_Scanner, name []byte, depth int) bo
 		return false
 	}
 
-	tx := tx.New(scan)
 	scan.NextWhile(Space, Tab)
 	tag := []byte{}
 
@@ -110,14 +117,12 @@ func (self *Markdown) parseClosingTag(scan *_Scanner, name []byte, depth int) bo
 	}
 
 	if !bytes.Equal(tag, name) {
-		tx.Rollback()
 		return false
 	}
 
 	scan.NextWhile(Space, Tab)
 
 	if !scan.Match(GreaterThan) || depth != len(self.path) {
-		tx.Rollback()
 		return false
 	}
 

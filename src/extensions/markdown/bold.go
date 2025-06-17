@@ -10,12 +10,11 @@ func (self *Markdown) ParseBold(parser html.Parser, ptr *tokens.Pointer) (html.N
 }
 
 func (self *Markdown) parseBold(parser html.Parser, scan *_Scanner) (*html.StrongElement, error) {
-	if !scan.MatchCount(Asterisk, 2) {
-		return nil, scan.Curr().Error("expected '**'")
-	}
-
-	log.Debugln("bold")
 	el := html.Strong()
+
+	if !scan.MatchCount(Asterisk, 2) {
+		return el, scan.Curr().Error("expected '**'")
+	}
 
 	for !scan.MatchCount(Asterisk, 2) {
 		node, err := parser.ParseInline(scan.ptr)
@@ -31,5 +30,6 @@ func (self *Markdown) parseBold(parser html.Parser, scan *_Scanner) (*html.Stron
 		el.Push(node)
 	}
 
+	log.Debugln("bold")
 	return el, nil
 }
