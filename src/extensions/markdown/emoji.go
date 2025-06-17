@@ -15,6 +15,7 @@ func (self *Markdown) parseEmoji(parser html.Parser, scan *_Scanner) (html.Raw, 
 		return nil, scan.Curr().Error("expected ':'")
 	}
 
+	log.Debugln("emoji")
 	alias := html.Raw{}
 
 	for !scan.Match(Colon) {

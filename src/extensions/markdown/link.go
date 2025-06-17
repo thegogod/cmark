@@ -14,6 +14,7 @@ func (self *Markdown) parseLink(parser html.Parser, scan *_Scanner) (*html.Ancho
 		return nil, scan.Curr().Error("expected '['")
 	}
 
+	log.Debugln("link")
 	link := html.A()
 
 	for !scan.Match(RightBracket) {

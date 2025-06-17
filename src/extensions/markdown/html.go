@@ -17,6 +17,7 @@ func (self *Markdown) parseHtml(parser html.Parser, scan *_Scanner) (*html.Eleme
 		self.path = []string{}
 	}
 
+	log.Debugln("html")
 	name := []byte{}
 	scan.NextWhile(Space, Tab)
 

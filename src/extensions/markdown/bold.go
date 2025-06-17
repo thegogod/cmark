@@ -14,6 +14,7 @@ func (self *Markdown) parseBold(parser html.Parser, scan *_Scanner) (*html.Stron
 		return nil, scan.Curr().Error("expected '**'")
 	}
 
+	log.Debugln("bold")
 	el := html.Strong()
 
 	for !scan.MatchCount(Asterisk, 2) {

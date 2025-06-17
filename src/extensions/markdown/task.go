@@ -57,6 +57,7 @@ func (self *Markdown) parseTask(parser html.Parser, scan *_Scanner) (*html.Label
 		text += string(node)
 	}
 
+	log.Debugln("task")
 	label.Push(input)
 	label.Push(html.Span(text))
 	return label, nil

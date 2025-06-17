@@ -14,6 +14,7 @@ func (self *Markdown) parseBlockQuote(parser html.Parser, scan *_Scanner) (*html
 		return nil, scan.Curr().Error("expected '>'")
 	}
 
+	log.Debugln("block_quote")
 	self.blockQuoteDepth++
 	el := html.BlockQuote()
 

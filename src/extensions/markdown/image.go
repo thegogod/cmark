@@ -14,6 +14,7 @@ func (self *Markdown) parseImage(parser html.Parser, scan *_Scanner) (*html.Imag
 		return nil, scan.Curr().Error("expected '!'")
 	}
 
+	log.Debugln("image")
 	image := html.Img()
 
 	if _, err := scan.Consume(LeftBracket, "expected '['"); err != nil {

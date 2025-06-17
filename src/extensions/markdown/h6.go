@@ -14,6 +14,7 @@ func (self *Markdown) parseH6(parser html.Parser, scan *_Scanner) (*html.Heading
 		return nil, scan.Curr().Error("expected '###### '")
 	}
 
+	log.Debugln("h6")
 	heading := html.H6()
 
 	for scan.Curr().Kind() != Eof && scan.Curr().Kind() != NewLine {

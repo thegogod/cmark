@@ -14,6 +14,7 @@ func (self *Markdown) parseBoldAlt(parser html.Parser, scan *_Scanner) (*html.St
 		return nil, scan.Curr().Error("expected '__'")
 	}
 
+	log.Debugln("bold_alt")
 	el := html.Strong()
 
 	for !scan.MatchCount(Underscore, 2) {

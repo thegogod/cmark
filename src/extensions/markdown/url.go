@@ -58,6 +58,7 @@ func (self *Markdown) parseUrl(parser html.Parser, scan *_Scanner) (*html.Anchor
 		}
 	}
 
+	log.Debugln("url")
 	url := fmt.Sprintf("%s://%s", protocol, path)
 	link.WithHref(url)
 	link.Push(url)

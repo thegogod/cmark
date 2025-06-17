@@ -14,5 +14,6 @@ func (self *Markdown) parseBreakLine(_ html.Parser, scan *_Scanner) (*html.Break
 		return nil, scan.Curr().Error("expected two spaces and a newline")
 	}
 
+	log.Debugln("break_line")
 	return html.Br(), nil
 }

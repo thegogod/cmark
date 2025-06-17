@@ -24,6 +24,7 @@ func (self *Markdown) parseNewLine(_ html.Parser, scan *_Scanner) (html.Raw, err
 		}
 	}
 
+	log.Debugln("new_line")
 	curr := scan.Curr().String()
 
 	if curr == " " || curr == "\n" {

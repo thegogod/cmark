@@ -16,6 +16,7 @@ func (self *Markdown) parseCodeBlock(parser html.Parser, scan *_Scanner) (*html.
 		return nil, scan.Curr().Error("expected '```'")
 	}
 
+	log.Debugln("code_block")
 	code := html.Code()
 	lang, err := self.parseTextUntil(NewLine, parser, scan)
 

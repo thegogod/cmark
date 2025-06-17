@@ -170,7 +170,7 @@ func (self CMark) print(message string) {
 		return
 	}
 
-	self.logger.Print(message)
+	self.logger.Debug(message)
 }
 
 func (self CMark) printf(format string, args ...any) {
@@ -178,7 +178,7 @@ func (self CMark) printf(format string, args ...any) {
 		return
 	}
 
-	self.logger.Printf(format, args...)
+	self.logger.Debugf(format, args...)
 }
 
 func (self CMark) println(message string) {
@@ -186,5 +186,5 @@ func (self CMark) println(message string) {
 		return
 	}
 
-	self.logger.Println(message)
+	self.logger.Debugln(message)
 }

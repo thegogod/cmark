@@ -14,6 +14,7 @@ func (self *Markdown) parseItalic(parser html.Parser, scan *_Scanner) (*html.Ita
 		return nil, scan.Curr().Error("expected '*'")
 	}
 
+	log.Debugln("italic")
 	italic := html.I()
 
 	for !scan.Match(Asterisk) {

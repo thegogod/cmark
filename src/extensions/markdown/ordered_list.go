@@ -14,6 +14,7 @@ func (self *Markdown) parseOrderedList(parser html.Parser, scan *_Scanner) (*htm
 		return nil, scan.Curr().Error("expected '{int}. '")
 	}
 
+	log.Debugln("ordered_list")
 	self.listDepth++
 	ol := html.Ol()
 

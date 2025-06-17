@@ -10,6 +10,7 @@ func (self *Markdown) ParseParagraph(parser html.Parser, ptr *tokens.Pointer) (h
 }
 
 func (self *Markdown) parseParagraph(parser html.Parser, scan *_Scanner) (*html.ParagraphElement, error) {
+	log.Debugln("paragraph")
 	paragraph := html.P()
 	buff := html.Raw{}
 

@@ -14,6 +14,7 @@ func (self *Markdown) parseH2(parser html.Parser, scan *_Scanner) (*html.Heading
 		return nil, scan.Curr().Error("expected '## '")
 	}
 
+	log.Debugln("h2")
 	heading := html.H2()
 
 	for scan.Curr().Kind() != Eof && scan.Curr().Kind() != NewLine {

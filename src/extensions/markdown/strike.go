@@ -14,6 +14,7 @@ func (self *Markdown) parseStrike(parser html.Parser, scan *_Scanner) (*html.Str
 		return nil, scan.Curr().Error("expected '~'")
 	}
 
+	log.Debugln("strike")
 	strike := html.S()
 
 	for !scan.Match(Tilde) {

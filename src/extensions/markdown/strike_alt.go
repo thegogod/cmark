@@ -14,6 +14,7 @@ func (self *Markdown) parseStrikeAlt(parser html.Parser, scan *_Scanner) (*html.
 		return nil, scan.Curr().Error("expected '~~'")
 	}
 
+	log.Debugln("strike_alt")
 	strike := html.S()
 
 	for !scan.MatchCount(Tilde, 2) {

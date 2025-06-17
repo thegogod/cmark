@@ -14,6 +14,7 @@ func (self *Markdown) parseCode(parser html.Parser, scan *_Scanner) (*html.CodeE
 		return nil, scan.Curr().Error("expected '`'")
 	}
 
+	log.Debugln("code")
 	code := html.Code()
 	text, err := self.parseTextUntil(BackQuote, parser, scan)
 

@@ -11,6 +11,7 @@ func (self *Markdown) ParseListItem(parser html.Parser, ptr *tokens.Pointer) (ht
 }
 
 func (self *Markdown) parseListItem(parser html.Parser, scan *_Scanner) (*html.ListItemElement, error) {
+	log.Debugln("list_item")
 	li := html.Li()
 	t := tx.New(scan)
 	node, err := self.parseTask(parser, scan)

@@ -14,6 +14,7 @@ func (self *Markdown) parseHighlight(parser html.Parser, scan *_Scanner) (*html.
 		return nil, scan.Curr().Error("expected '=='")
 	}
 
+	log.Debugln("highlight")
 	mark := html.Mark()
 
 	for !scan.MatchCount(EqualsEquals, 1) {

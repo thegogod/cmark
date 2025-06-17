@@ -1,7 +1,6 @@
 package markdown_test
 
 import (
-	"log"
 	"os"
 	"path/filepath"
 	"strings"
@@ -12,7 +11,7 @@ import (
 
 func TestMarkdown(t *testing.T) {
 	RunDir(t, filepath.Join("testcases"), func(t *testing.T, md []byte, html []byte) {
-		parser := cmark.New().WithLogging(log.New(os.Stdout, "cmark", log.LstdFlags))
+		parser := cmark.New()
 		node, err := parser.Parse(md)
 
 		if err != nil {

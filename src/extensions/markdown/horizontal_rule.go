@@ -14,5 +14,6 @@ func (self *Markdown) parseHorizontalRule(_ html.Parser, scan *_Scanner) (*html.
 		return nil, scan.Curr().Error("expected '---'")
 	}
 
+	log.Debugln("horizontal_rule")
 	return html.Hr(), nil
 }

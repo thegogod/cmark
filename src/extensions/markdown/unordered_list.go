@@ -14,6 +14,7 @@ func (self *Markdown) parseUnorderedList(parser html.Parser, scan *_Scanner) (*h
 		return nil, scan.Curr().Error("expected '- '")
 	}
 
+	log.Debugln("unordered_list")
 	self.listDepth++
 	ul := html.Ul()
 

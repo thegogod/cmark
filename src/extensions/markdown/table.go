@@ -16,6 +16,7 @@ func (self *Markdown) parseTable(parser html.Parser, scan *_Scanner) (*html.Tabl
 		return nil, scan.Curr().Error("expected '|'")
 	}
 
+	log.Debugln("table")
 	table := html.Table()
 	columns := []*html.TableCellElement{}
 

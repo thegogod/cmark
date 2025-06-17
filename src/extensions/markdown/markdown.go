@@ -4,9 +4,12 @@ import (
 	"bytes"
 
 	"github.com/thegogod/cmark/html"
+	"github.com/thegogod/cmark/logging"
 	"github.com/thegogod/cmark/tokens"
 	"github.com/thegogod/cmark/tx"
 )
+
+var log = logging.Console("markdown")
 
 type Markdown struct {
 	blockQuoteDepth int
@@ -23,10 +26,12 @@ func (self *Markdown) Name() string {
 }
 
 func (self *Markdown) ParseBlock(parser html.Parser, ptr *tokens.Pointer) (html.Node, error) {
+	log.Debugln("block")
 	return self.parseBlock(parser, NewScanner(ptr))
 }
 
 func (self *Markdown) ParseInline(parser html.Parser, ptr *tokens.Pointer) (html.Node, error) {
+	log.Debugln("inline")
 	return self.parseInline(parser, NewScanner(ptr))
 }
 
