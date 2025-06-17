@@ -13,8 +13,9 @@ import (
 	"github.com/thegogod/cmark/tx"
 )
 
+var log = logging.Console("cmark")
+
 type CMark struct {
-	logger     logging.Logger
 	extensions []Extension
 }
 
@@ -27,12 +28,7 @@ func New(extensions ...Extension) *CMark {
 		extensions = append(extensions, markdown.New())
 	}
 
-	return &CMark{nil, extensions}
-}
-
-func (self *CMark) WithLogging(logger logging.Logger) *CMark {
-	self.logger = logger
-	return self
+	return &CMark{extensions}
 }
 
 func (self *CMark) Parse(src []byte) (html.Node, error) {
@@ -68,7 +64,7 @@ func (self *CMark) Parse(src []byte) (html.Node, error) {
 }
 
 func (self *CMark) ParseDir(path string) ([]html.Node, error) {
-	self.println(path)
+	log.Debugln(path)
 	entries, err := os.ReadDir(path)
 
 	if err != nil {
@@ -103,7 +99,7 @@ func (self *CMark) ParseDir(path string) ([]html.Node, error) {
 }
 
 func (self *CMark) ParseFile(path string) (html.Node, error) {
-	self.println(path)
+	log.Debugln(path)
 	src, err := os.ReadFile(path)
 
 	if err != nil {
@@ -131,6 +127,12 @@ func (self *CMark) ParseBlock(ptr *tokens.Pointer) (html.Node, error) {
 		}
 
 		tx.Rollback()
+
+		if err == nil {
+			continue
+		}
+
+		log.Debugf("[%s] %s", ext.Name(), err.Error())
 	}
 
 	return node, err
@@ -154,37 +156,13 @@ func (self *CMark) ParseInline(ptr *tokens.Pointer) (html.Node, error) {
 		}
 
 		tx.Rollback()
+
+		if err == nil {
+			continue
+		}
+
+		log.Debugf("[%s] %s", ext.Name(), err.Error())
 	}
 
 	return node, err
-}
-
-func (self *CMark) ParseSyntax(ptr *tokens.Pointer, extension string, name string) (html.Node, error) {
-	self.printf("parsing '%s->%s'...", extension, name)
-	self.print("done\n")
-	return nil, nil
-}
-
-func (self CMark) print(message string) {
-	if self.logger == nil {
-		return
-	}
-
-	self.logger.Debug(message)
-}
-
-func (self CMark) printf(format string, args ...any) {
-	if self.logger == nil {
-		return
-	}
-
-	self.logger.Debugf(format, args...)
-}
-
-func (self CMark) println(message string) {
-	if self.logger == nil {
-		return
-	}
-
-	self.logger.Debugln(message)
 }

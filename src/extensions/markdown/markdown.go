@@ -9,7 +9,7 @@ import (
 	"github.com/thegogod/cmark/tx"
 )
 
-var log = logging.Console("markdown")
+var log = logging.Console("cmark.markdown")
 
 type Markdown struct {
 	blockQuoteDepth int
@@ -33,10 +33,6 @@ func (self *Markdown) ParseBlock(parser html.Parser, ptr *tokens.Pointer) (html.
 func (self *Markdown) ParseInline(parser html.Parser, ptr *tokens.Pointer) (html.Node, error) {
 	log.Debugln("inline")
 	return self.parseInline(parser, NewScanner(ptr))
-}
-
-func (self *Markdown) ParseSyntax(parser html.Parser, ptr *tokens.Pointer, name string) (html.Node, error) {
-	return nil, nil
 }
 
 func (self *Markdown) ParseText(parser html.Parser, ptr *tokens.Pointer) ([]byte, error) {
@@ -105,6 +101,11 @@ func (self *Markdown) parseBlock(parser html.Parser, scan *_Scanner) (html.Node,
 
 	if err != nil {
 		tx.Rollback()
+		node, err = self.parseCodeBlock(parser, scan)
+	}
+
+	if err != nil {
+		tx.Rollback()
 		node, err = self.parseBlockQuote(parser, scan)
 	}
 
@@ -140,7 +141,12 @@ func (self *Markdown) parseInline(parser html.Parser, scan *_Scanner) (html.Node
 	var err error = nil
 
 	tx := tx.Compound(tx.New(scan.ptr), tx.New(scan))
-	node, err = self.parseBold(parser, scan)
+	node, err = self.parseHtml(parser, scan)
+
+	if err != nil {
+		tx.Rollback()
+		node, err = self.parseBold(parser, scan)
+	}
 
 	if err != nil {
 		tx.Rollback()

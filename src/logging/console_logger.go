@@ -29,7 +29,7 @@ func Console(name string) ConsoleLogger {
 }
 
 func (self ConsoleLogger) Child(name string) ConsoleLogger {
-	return Console(strings.Join([]string{self.Name, name}, "/"))
+	return Console(strings.Join([]string{self.Name, name}, "."))
 }
 
 func (self ConsoleLogger) Debug(v ...any) {

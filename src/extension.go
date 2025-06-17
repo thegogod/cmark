@@ -9,5 +9,4 @@ type Extension interface {
 	Name() string
 	ParseBlock(parser html.Parser, ptr *tokens.Pointer) (html.Node, error)
 	ParseInline(parser html.Parser, ptr *tokens.Pointer) (html.Node, error)
-	ParseSyntax(parser html.Parser, ptr *tokens.Pointer, name string) (html.Node, error)
 }
