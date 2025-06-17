@@ -1,16 +1,15 @@
 package markdown
 
 import (
-	"github.com/thegogod/cmark/ast"
 	"github.com/thegogod/cmark/html"
 	"github.com/thegogod/cmark/tokens"
 )
 
-func (self *Markdown) ParseParagraph(parser ast.Parser, ptr *tokens.Pointer) (ast.Node, error) {
+func (self *Markdown) ParseParagraph(parser html.Parser, ptr *tokens.Pointer) (html.Node, error) {
 	return self.parseParagraph(parser, NewScanner(ptr))
 }
 
-func (self *Markdown) parseParagraph(parser ast.Parser, scan *_Scanner) (*html.ParagraphElement, error) {
+func (self *Markdown) parseParagraph(parser html.Parser, scan *_Scanner) (*html.ParagraphElement, error) {
 	paragraph := html.P()
 	buff := html.Raw{}
 

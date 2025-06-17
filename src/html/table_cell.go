@@ -3,9 +3,6 @@ package html
 import (
 	"strconv"
 
-	"github.com/thegogod/cmark/ast"
-	"github.com/thegogod/cmark/reflect"
-
 	"github.com/thegogod/cmark/maps"
 )
 
@@ -159,12 +156,12 @@ func (self *TableCellElement) Pop() *TableCellElement {
 	return self
 }
 
-func (self TableCellElement) Render(scope *ast.Scope) []byte {
-	return self.element.Render(scope)
+func (self TableCellElement) Render() []byte {
+	return self.element.Render()
 }
 
-func (self TableCellElement) RenderPretty(scope *ast.Scope, indent string) []byte {
-	return self.element.RenderPretty(scope, indent)
+func (self TableCellElement) RenderPretty(indent string) []byte {
+	return self.element.RenderPretty(indent)
 }
 
 func (self *TableCellElement) GetById(id string) Node {
@@ -173,13 +170,4 @@ func (self *TableCellElement) GetById(id string) Node {
 
 func (self *TableCellElement) Select(query ...any) []Node {
 	return self.element.Select(query...)
-}
-
-func (self TableCellElement) Validate(scope *ast.Scope) error {
-	return nil
-}
-
-func (self TableCellElement) Evaluate(scope *ast.Scope) (reflect.Value, error) {
-	value := self.Render(scope)
-	return reflect.NewString(string(value)), nil
 }

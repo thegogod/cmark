@@ -1,16 +1,15 @@
 package markdown
 
 import (
-	"github.com/thegogod/cmark/ast"
 	"github.com/thegogod/cmark/html"
 	"github.com/thegogod/cmark/tokens"
 )
 
-func (self *Markdown) ParseUnorderedList(parser ast.Parser, ptr *tokens.Pointer) (ast.Node, error) {
+func (self *Markdown) ParseUnorderedList(parser html.Parser, ptr *tokens.Pointer) (html.Node, error) {
 	return self.parseUnorderedList(parser, NewScanner(ptr))
 }
 
-func (self *Markdown) parseUnorderedList(parser ast.Parser, scan *_Scanner) (*html.UnorderedListElement, error) {
+func (self *Markdown) parseUnorderedList(parser html.Parser, scan *_Scanner) (*html.UnorderedListElement, error) {
 	if !scan.Match(Dash) || !scan.Match(Space) {
 		return nil, scan.Curr().Error("expected '- '")
 	}

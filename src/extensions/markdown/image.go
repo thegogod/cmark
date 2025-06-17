@@ -1,16 +1,15 @@
 package markdown
 
 import (
-	"github.com/thegogod/cmark/ast"
 	"github.com/thegogod/cmark/html"
 	"github.com/thegogod/cmark/tokens"
 )
 
-func (self *Markdown) ParseImage(parser ast.Parser, ptr *tokens.Pointer) (ast.Node, error) {
+func (self *Markdown) ParseImage(parser html.Parser, ptr *tokens.Pointer) (html.Node, error) {
 	return self.parseImage(parser, NewScanner(ptr))
 }
 
-func (self *Markdown) parseImage(parser ast.Parser, scan *_Scanner) (*html.ImageElement, error) {
+func (self *Markdown) parseImage(parser html.Parser, scan *_Scanner) (*html.ImageElement, error) {
 	if !scan.Match(Bang) {
 		return nil, scan.Curr().Error("expected '!'")
 	}

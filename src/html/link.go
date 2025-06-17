@@ -1,9 +1,7 @@
 package html
 
 import (
-	"github.com/thegogod/cmark/ast"
 	"github.com/thegogod/cmark/maps"
-	"github.com/thegogod/cmark/reflect"
 )
 
 // https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/link
@@ -127,12 +125,12 @@ func (self *LinkElement) DelStyle(name ...string) {
 	self.element.DelStyle(name...)
 }
 
-func (self LinkElement) Render(scope *ast.Scope) []byte {
-	return self.element.Render(scope)
+func (self LinkElement) Render() []byte {
+	return self.element.Render()
 }
 
-func (self LinkElement) RenderPretty(scope *ast.Scope, indent string) []byte {
-	return self.element.RenderPretty(scope, indent)
+func (self LinkElement) RenderPretty(indent string) []byte {
+	return self.element.RenderPretty(indent)
 }
 
 func (self *LinkElement) GetById(id string) Node {
@@ -141,13 +139,4 @@ func (self *LinkElement) GetById(id string) Node {
 
 func (self *LinkElement) Select(query ...any) []Node {
 	return self.element.Select(query...)
-}
-
-func (self LinkElement) Validate(scope *ast.Scope) error {
-	return nil
-}
-
-func (self LinkElement) Evaluate(scope *ast.Scope) (reflect.Value, error) {
-	value := self.Render(scope)
-	return reflect.NewString(string(value)), nil
 }

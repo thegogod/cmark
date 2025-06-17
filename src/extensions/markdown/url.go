@@ -4,17 +4,16 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/thegogod/cmark/ast"
 	"github.com/thegogod/cmark/html"
 	"github.com/thegogod/cmark/tokens"
 	"github.com/thegogod/cmark/tx"
 )
 
-func (self *Markdown) ParseUrl(parser ast.Parser, ptr *tokens.Pointer) (ast.Node, error) {
+func (self *Markdown) ParseUrl(parser html.Parser, ptr *tokens.Pointer) (html.Node, error) {
 	return self.parseUrl(parser, NewScanner(ptr))
 }
 
-func (self *Markdown) parseUrl(parser ast.Parser, scan *_Scanner) (*html.AnchorElement, error) {
+func (self *Markdown) parseUrl(parser html.Parser, scan *_Scanner) (*html.AnchorElement, error) {
 	tx := tx.New(scan)
 	text, err := self.parseText(parser, scan)
 

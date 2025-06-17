@@ -3,9 +3,6 @@ package html
 import (
 	"strings"
 
-	"github.com/thegogod/cmark/ast"
-	"github.com/thegogod/cmark/reflect"
-
 	"github.com/thegogod/cmark/maps"
 )
 
@@ -122,7 +119,7 @@ func (self *FragmentElement) Pop() *FragmentElement {
 	return self
 }
 
-func (self FragmentElement) Render(scope *ast.Scope) []byte {
+func (self FragmentElement) Render() []byte {
 	content := ""
 
 	for _, node := range self {
@@ -130,13 +127,13 @@ func (self FragmentElement) Render(scope *ast.Scope) []byte {
 			continue
 		}
 
-		content += string(node.Render(scope))
+		content += string(node.Render())
 	}
 
 	return []byte(content)
 }
 
-func (self FragmentElement) RenderPretty(scope *ast.Scope, indent string) []byte {
+func (self FragmentElement) RenderPretty(indent string) []byte {
 	content := []string{}
 
 	for _, node := range self {
@@ -144,7 +141,7 @@ func (self FragmentElement) RenderPretty(scope *ast.Scope, indent string) []byte
 			continue
 		}
 
-		content = append(content, string(node.RenderPretty(scope, indent)))
+		content = append(content, string(node.RenderPretty(indent)))
 	}
 
 	return []byte(strings.Join(content, "\n"))
@@ -168,13 +165,4 @@ func (self FragmentElement) Select(query ...any) []Node {
 	}
 
 	return nodes
-}
-
-func (self FragmentElement) Validate(scope *ast.Scope) error {
-	return nil
-}
-
-func (self FragmentElement) Evaluate(scope *ast.Scope) (reflect.Value, error) {
-	value := self.Render(scope)
-	return reflect.NewString(string(value)), nil
 }

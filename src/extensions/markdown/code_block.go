@@ -3,16 +3,15 @@ package markdown
 import (
 	"fmt"
 
-	"github.com/thegogod/cmark/ast"
 	"github.com/thegogod/cmark/html"
 	"github.com/thegogod/cmark/tokens"
 )
 
-func (self *Markdown) ParseCodeBlock(parser ast.Parser, ptr *tokens.Pointer) (ast.Node, error) {
+func (self *Markdown) ParseCodeBlock(parser html.Parser, ptr *tokens.Pointer) (html.Node, error) {
 	return self.parseCodeBlock(parser, NewScanner(ptr))
 }
 
-func (self *Markdown) parseCodeBlock(parser ast.Parser, scan *_Scanner) (*html.PreElement, error) {
+func (self *Markdown) parseCodeBlock(parser html.Parser, scan *_Scanner) (*html.PreElement, error) {
 	if !scan.MatchCount(BackQuote, 3) {
 		return nil, scan.Curr().Error("expected '```'")
 	}

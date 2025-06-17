@@ -1,13 +1,13 @@
 package cmark
 
 import (
-	"github.com/thegogod/cmark/ast"
+	"github.com/thegogod/cmark/html"
 	"github.com/thegogod/cmark/tokens"
 )
 
 type Extension interface {
 	Name() string
-	ParseBlock(parser ast.Parser, ptr *tokens.Pointer) (ast.Node, error)
-	ParseInline(parser ast.Parser, ptr *tokens.Pointer) (ast.Node, error)
-	ParseSyntax(parser ast.Parser, ptr *tokens.Pointer, name string) (ast.Node, error)
+	ParseBlock(parser html.Parser, ptr *tokens.Pointer) (html.Node, error)
+	ParseInline(parser html.Parser, ptr *tokens.Pointer) (html.Node, error)
+	ParseSyntax(parser html.Parser, ptr *tokens.Pointer, name string) (html.Node, error)
 }

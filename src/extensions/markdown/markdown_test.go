@@ -1,41 +1,38 @@
 package markdown_test
 
 import (
+	"log"
 	"os"
 	"path/filepath"
 	"strings"
 	"testing"
 
 	"github.com/thegogod/cmark"
-	"github.com/thegogod/cmark/ast"
 )
 
 func TestMarkdown(t *testing.T) {
-	t.SkipNow()
-	scope := ast.NewScope()
-
 	RunDir(t, filepath.Join("testcases"), func(t *testing.T, md []byte, html []byte) {
-		parser := cmark.New()
+		parser := cmark.New().WithLogging(log.New(os.Stdout, "cmark", log.LstdFlags))
 		node, err := parser.Parse(md)
 
 		if err != nil {
 			t.Fatal(err)
 		}
 
-		value, err := node.Evaluate(scope)
+		value := node.RenderPretty(" ")
 
 		if err != nil {
 			t.Fatal(err)
 		}
 
 		if html == nil {
-			t.Log(value.String())
+			t.Log(string(value))
 			return
 		}
 
-		if string(html) != value.String() {
+		if string(html) != string(value) {
 			t.Logf("expected: %v", string(html))
-			t.Logf("received: %v", value.String())
+			t.Logf("received: %v", string(value))
 			t.FailNow()
 		}
 	})

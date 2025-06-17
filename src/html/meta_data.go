@@ -1,9 +1,7 @@
 package html
 
 import (
-	"github.com/thegogod/cmark/ast"
 	"github.com/thegogod/cmark/maps"
-	"github.com/thegogod/cmark/reflect"
 )
 
 type MetaDataElement map[string]any
@@ -108,11 +106,11 @@ func (self MetaDataElement) DelStyle(name ...string) {
 	return
 }
 
-func (self MetaDataElement) Render(scope *ast.Scope) []byte {
+func (self MetaDataElement) Render() []byte {
 	return []byte{}
 }
 
-func (self MetaDataElement) RenderPretty(scope *ast.Scope, indent string) []byte {
+func (self MetaDataElement) RenderPretty(indent string) []byte {
 	return []byte{}
 }
 
@@ -142,13 +140,4 @@ func (self MetaDataElement) Select(query ...any) []Node {
 	}
 
 	return nodes
-}
-
-func (self MetaDataElement) Validate(scope *ast.Scope) error {
-	return nil
-}
-
-func (self MetaDataElement) Evaluate(scope *ast.Scope) (reflect.Value, error) {
-	value := self.Render(scope)
-	return reflect.NewString(string(value)), nil
 }

@@ -4,9 +4,6 @@ import (
 	"bytes"
 	"unicode"
 
-	"github.com/thegogod/cmark/ast"
-	"github.com/thegogod/cmark/reflect"
-
 	"github.com/thegogod/cmark/maps"
 )
 
@@ -184,12 +181,12 @@ func (self *HeadingElement) Pop() *HeadingElement {
 	return self
 }
 
-func (self HeadingElement) Render(scope *ast.Scope) []byte {
+func (self HeadingElement) Render() []byte {
 	if !self.element.attributes.Exists("id") {
 		id := []byte{}
 
 		for _, child := range self.element.children {
-			value := child.Render(scope)
+			value := child.Render()
 
 			for _, b := range value {
 				if unicode.IsSpace(rune(b)) {
@@ -205,15 +202,15 @@ func (self HeadingElement) Render(scope *ast.Scope) []byte {
 		self.SetAttr("id", string(id))
 	}
 
-	return self.element.Render(scope)
+	return self.element.Render()
 }
 
-func (self HeadingElement) RenderPretty(scope *ast.Scope, indent string) []byte {
+func (self HeadingElement) RenderPretty(indent string) []byte {
 	if !self.element.attributes.Exists("id") {
 		id := []byte{}
 
 		for _, child := range self.element.children {
-			value := child.Render(scope)
+			value := child.Render()
 
 			for _, b := range value {
 				if unicode.IsSpace(rune(b)) {
@@ -229,7 +226,7 @@ func (self HeadingElement) RenderPretty(scope *ast.Scope, indent string) []byte 
 		self.SetAttr("id", string(id))
 	}
 
-	return self.element.RenderPretty(scope, indent)
+	return self.element.RenderPretty(indent)
 }
 
 func (self *HeadingElement) GetById(id string) Node {
@@ -238,13 +235,4 @@ func (self *HeadingElement) GetById(id string) Node {
 
 func (self *HeadingElement) Select(query ...any) []Node {
 	return self.element.Select(query...)
-}
-
-func (self HeadingElement) Validate(scope *ast.Scope) error {
-	return nil
-}
-
-func (self HeadingElement) Evaluate(scope *ast.Scope) (reflect.Value, error) {
-	value := self.Render(scope)
-	return reflect.NewString(string(value)), nil
 }

@@ -1,9 +1,7 @@
 package html
 
 import (
-	"github.com/thegogod/cmark/ast"
 	"github.com/thegogod/cmark/maps"
-	"github.com/thegogod/cmark/reflect"
 )
 
 // https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/img
@@ -127,12 +125,12 @@ func (self *ImageElement) DelStyle(name ...string) {
 	self.element.DelStyle(name...)
 }
 
-func (self ImageElement) Render(scope *ast.Scope) []byte {
-	return self.element.Render(scope)
+func (self ImageElement) Render() []byte {
+	return self.element.Render()
 }
 
-func (self ImageElement) RenderPretty(scope *ast.Scope, indent string) []byte {
-	return self.element.RenderPretty(scope, indent)
+func (self ImageElement) RenderPretty(indent string) []byte {
+	return self.element.RenderPretty(indent)
 }
 
 func (self *ImageElement) GetById(id string) Node {
@@ -141,13 +139,4 @@ func (self *ImageElement) GetById(id string) Node {
 
 func (self *ImageElement) Select(query ...any) []Node {
 	return self.element.Select(query...)
-}
-
-func (self ImageElement) Validate(scope *ast.Scope) error {
-	return nil
-}
-
-func (self ImageElement) Evaluate(scope *ast.Scope) (reflect.Value, error) {
-	value := self.Render(scope)
-	return reflect.NewString(string(value)), nil
 }

@@ -2,9 +2,6 @@ package html
 
 import (
 	"strings"
-
-	"github.com/thegogod/cmark/ast"
-	"github.com/thegogod/cmark/reflect"
 )
 
 // https://developer.mozilla.org/en-US/docs/Web/API/Document
@@ -63,7 +60,7 @@ func (self *Document) Pop() *Document {
 	return self
 }
 
-func (self Document) Render(scope *ast.Scope) []byte {
+func (self Document) Render() []byte {
 	content := ""
 
 	for _, node := range self {
@@ -71,13 +68,13 @@ func (self Document) Render(scope *ast.Scope) []byte {
 			continue
 		}
 
-		content += string(node.Render(scope))
+		content += string(node.Render())
 	}
 
 	return []byte(content)
 }
 
-func (self Document) RenderPretty(scope *ast.Scope, indent string) []byte {
+func (self Document) RenderPretty(indent string) []byte {
 	content := []string{}
 
 	for _, node := range self {
@@ -85,7 +82,7 @@ func (self Document) RenderPretty(scope *ast.Scope, indent string) []byte {
 			continue
 		}
 
-		content = append(content, string(node.RenderPretty(scope, indent)))
+		content = append(content, string(node.RenderPretty(indent)))
 	}
 
 	return []byte(strings.Join(content, "\n"))
@@ -109,13 +106,4 @@ func (self Document) Select(query ...any) []Node {
 	}
 
 	return nodes
-}
-
-func (self Document) Validate(scope *ast.Scope) error {
-	return nil
-}
-
-func (self Document) Evaluate(scope *ast.Scope) (reflect.Value, error) {
-	value := self.Render(scope)
-	return reflect.NewString(string(value)), nil
 }

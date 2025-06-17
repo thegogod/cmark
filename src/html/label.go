@@ -1,9 +1,7 @@
 package html
 
 import (
-	"github.com/thegogod/cmark/ast"
 	"github.com/thegogod/cmark/maps"
-	"github.com/thegogod/cmark/reflect"
 )
 
 // https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/label
@@ -140,12 +138,12 @@ func (self *LabelElement) Pop() *LabelElement {
 	return self
 }
 
-func (self LabelElement) Render(scope *ast.Scope) []byte {
-	return self.element.Render(scope)
+func (self LabelElement) Render() []byte {
+	return self.element.Render()
 }
 
-func (self LabelElement) RenderPretty(scope *ast.Scope, indent string) []byte {
-	return self.element.RenderPretty(scope, indent)
+func (self LabelElement) RenderPretty(indent string) []byte {
+	return self.element.RenderPretty(indent)
 }
 
 func (self *LabelElement) GetById(id string) Node {
@@ -154,13 +152,4 @@ func (self *LabelElement) GetById(id string) Node {
 
 func (self *LabelElement) Select(query ...any) []Node {
 	return self.element.Select(query...)
-}
-
-func (self LabelElement) Validate(scope *ast.Scope) error {
-	return nil
-}
-
-func (self LabelElement) Evaluate(scope *ast.Scope) (reflect.Value, error) {
-	value := self.Render(scope)
-	return reflect.NewString(string(value)), nil
 }

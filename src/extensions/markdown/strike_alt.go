@@ -1,16 +1,15 @@
 package markdown
 
 import (
-	"github.com/thegogod/cmark/ast"
 	"github.com/thegogod/cmark/html"
 	"github.com/thegogod/cmark/tokens"
 )
 
-func (self *Markdown) ParseStrikeAlt(parser ast.Parser, ptr *tokens.Pointer) (ast.Node, error) {
+func (self *Markdown) ParseStrikeAlt(parser html.Parser, ptr *tokens.Pointer) (html.Node, error) {
 	return self.parseStrikeAlt(parser, NewScanner(ptr))
 }
 
-func (self *Markdown) parseStrikeAlt(parser ast.Parser, scan *_Scanner) (*html.StrikeElement, error) {
+func (self *Markdown) parseStrikeAlt(parser html.Parser, scan *_Scanner) (*html.StrikeElement, error) {
 	if !scan.MatchCount(Tilde, 2) {
 		return nil, scan.Curr().Error("expected '~~'")
 	}

@@ -3,16 +3,15 @@ package markdown
 import (
 	"bytes"
 
-	"github.com/thegogod/cmark/ast"
 	"github.com/thegogod/cmark/html"
 	"github.com/thegogod/cmark/tokens"
 )
 
-func (self *Markdown) ParseTable(parser ast.Parser, ptr *tokens.Pointer) (ast.Node, error) {
+func (self *Markdown) ParseTable(parser html.Parser, ptr *tokens.Pointer) (html.Node, error) {
 	return self.parseTable(parser, NewScanner(ptr))
 }
 
-func (self *Markdown) parseTable(parser ast.Parser, scan *_Scanner) (*html.TableElement, error) {
+func (self *Markdown) parseTable(parser html.Parser, scan *_Scanner) (*html.TableElement, error) {
 	if !scan.MatchCount(Pipe, 1) {
 		return nil, scan.Curr().Error("expected '|'")
 	}

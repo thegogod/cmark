@@ -1,16 +1,15 @@
 package markdown
 
 import (
-	"github.com/thegogod/cmark/ast"
 	"github.com/thegogod/cmark/html"
 	"github.com/thegogod/cmark/tokens"
 )
 
-func (self *Markdown) ParseBold(parser ast.Parser, ptr *tokens.Pointer) (ast.Node, error) {
+func (self *Markdown) ParseBold(parser html.Parser, ptr *tokens.Pointer) (html.Node, error) {
 	return self.parseBold(parser, NewScanner(ptr))
 }
 
-func (self *Markdown) parseBold(parser ast.Parser, scan *_Scanner) (*html.StrongElement, error) {
+func (self *Markdown) parseBold(parser html.Parser, scan *_Scanner) (*html.StrongElement, error) {
 	if !scan.MatchCount(Asterisk, 2) {
 		return nil, scan.Curr().Error("expected '**'")
 	}

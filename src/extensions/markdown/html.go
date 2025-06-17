@@ -3,17 +3,16 @@ package markdown
 import (
 	"bytes"
 
-	"github.com/thegogod/cmark/ast"
 	"github.com/thegogod/cmark/html"
 	"github.com/thegogod/cmark/tokens"
 	"github.com/thegogod/cmark/tx"
 )
 
-func (self *Markdown) ParseHtml(parser ast.Parser, ptr *tokens.Pointer) (ast.Node, error) {
+func (self *Markdown) ParseHtml(parser html.Parser, ptr *tokens.Pointer) (html.Node, error) {
 	return self.parseHtml(parser, NewScanner(ptr))
 }
 
-func (self *Markdown) parseHtml(parser ast.Parser, scan *_Scanner) (*html.Element, error) {
+func (self *Markdown) parseHtml(parser html.Parser, scan *_Scanner) (*html.Element, error) {
 	if self.path == nil {
 		self.path = []string{}
 	}

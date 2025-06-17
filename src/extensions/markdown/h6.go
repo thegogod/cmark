@@ -1,16 +1,15 @@
 package markdown
 
 import (
-	"github.com/thegogod/cmark/ast"
 	"github.com/thegogod/cmark/html"
 	"github.com/thegogod/cmark/tokens"
 )
 
-func (self *Markdown) ParseH6(parser ast.Parser, ptr *tokens.Pointer) (ast.Node, error) {
+func (self *Markdown) ParseH6(parser html.Parser, ptr *tokens.Pointer) (html.Node, error) {
 	return self.parseH6(parser, NewScanner(ptr))
 }
 
-func (self *Markdown) parseH6(parser ast.Parser, scan *_Scanner) (*html.HeadingElement, error) {
+func (self *Markdown) parseH6(parser html.Parser, scan *_Scanner) (*html.HeadingElement, error) {
 	if !scan.MatchCount(Hash, 6) || !scan.Match(Space) {
 		return nil, scan.Curr().Error("expected '###### '")
 	}

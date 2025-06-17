@@ -1,9 +1,7 @@
 package html
 
 import (
-	"github.com/thegogod/cmark/ast"
 	"github.com/thegogod/cmark/maps"
-	"github.com/thegogod/cmark/reflect"
 )
 
 // https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/mark
@@ -135,12 +133,12 @@ func (self *MarkElement) Pop() *MarkElement {
 	return self
 }
 
-func (self MarkElement) Render(scope *ast.Scope) []byte {
-	return self.element.Render(scope)
+func (self MarkElement) Render() []byte {
+	return self.element.Render()
 }
 
-func (self MarkElement) RenderPretty(scope *ast.Scope, indent string) []byte {
-	return self.element.RenderPretty(scope, indent)
+func (self MarkElement) RenderPretty(indent string) []byte {
+	return self.element.RenderPretty(indent)
 }
 
 func (self *MarkElement) GetById(id string) Node {
@@ -149,13 +147,4 @@ func (self *MarkElement) GetById(id string) Node {
 
 func (self *MarkElement) Select(query ...any) []Node {
 	return self.element.Select(query...)
-}
-
-func (self MarkElement) Validate(scope *ast.Scope) error {
-	return nil
-}
-
-func (self MarkElement) Evaluate(scope *ast.Scope) (reflect.Value, error) {
-	value := self.Render(scope)
-	return reflect.NewString(string(value)), nil
 }

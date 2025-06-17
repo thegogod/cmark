@@ -1,16 +1,15 @@
 package markdown
 
 import (
-	"github.com/thegogod/cmark/ast"
 	"github.com/thegogod/cmark/html"
 	"github.com/thegogod/cmark/tokens"
 )
 
-func (self *Markdown) ParseNewLine(parser ast.Parser, ptr *tokens.Pointer) (ast.Node, error) {
+func (self *Markdown) ParseNewLine(parser html.Parser, ptr *tokens.Pointer) (html.Node, error) {
 	return self.parseNewLine(parser, NewScanner(ptr))
 }
 
-func (self *Markdown) parseNewLine(_ ast.Parser, scan *_Scanner) (html.Raw, error) {
+func (self *Markdown) parseNewLine(_ html.Parser, scan *_Scanner) (html.Raw, error) {
 	if !scan.Match(NewLine) {
 		return nil, scan.Curr().Error("expected newline")
 	}

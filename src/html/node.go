@@ -1,13 +1,10 @@
 package html
 
 import (
-	"github.com/thegogod/cmark/ast"
 	"github.com/thegogod/cmark/maps"
 )
 
 type Node interface {
-	ast.Node
-
 	GetSelector() string
 
 	HasAttr(name string) bool
@@ -36,8 +33,8 @@ type Node interface {
 	GetById(id string) Node
 	Select(query ...any) []Node
 
-	Render(scope *ast.Scope) []byte
-	RenderPretty(scope *ast.Scope, indent string) []byte
+	Render() []byte
+	RenderPretty(indent string) []byte
 }
 
 type ParentNode interface {

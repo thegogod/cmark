@@ -1,16 +1,15 @@
 package markdown
 
 import (
-	"github.com/thegogod/cmark/ast"
 	"github.com/thegogod/cmark/html"
 	"github.com/thegogod/cmark/tokens"
 )
 
-func (self *Markdown) ParseOrderedList(parser ast.Parser, ptr *tokens.Pointer) (ast.Node, error) {
+func (self *Markdown) ParseOrderedList(parser html.Parser, ptr *tokens.Pointer) (html.Node, error) {
 	return self.parseOrderedList(parser, NewScanner(ptr))
 }
 
-func (self *Markdown) parseOrderedList(parser ast.Parser, scan *_Scanner) (*html.OrderedListElement, error) {
+func (self *Markdown) parseOrderedList(parser html.Parser, scan *_Scanner) (*html.OrderedListElement, error) {
 	if !scan.Match(Integer) || !scan.Match(Period) || scan.Match(Space) {
 		return nil, scan.Curr().Error("expected '{int}. '")
 	}

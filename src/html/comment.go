@@ -4,9 +4,6 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/thegogod/cmark/ast"
-	"github.com/thegogod/cmark/reflect"
-
 	"github.com/thegogod/cmark/maps"
 )
 
@@ -89,11 +86,11 @@ func (self Comment) DelStyle(name ...string) {
 	return
 }
 
-func (self Comment) Render(scope *ast.Scope) []byte {
+func (self Comment) Render() []byte {
 	return []byte(fmt.Sprintf("<!-- %s -->", string(self)))
 }
 
-func (self Comment) RenderPretty(scope *ast.Scope, indent string) []byte {
+func (self Comment) RenderPretty(indent string) []byte {
 	lines := strings.Split(string(self), "\n")
 	formatted := strings.Join(lines, "\n"+indent)
 	return []byte(fmt.Sprintf("<!--\n %s \n-->", formatted))
@@ -105,13 +102,4 @@ func (self Comment) GetById(id string) Node {
 
 func (self Comment) Select(query ...any) []Node {
 	return []Node{}
-}
-
-func (self Comment) Validate(scope *ast.Scope) error {
-	return nil
-}
-
-func (self Comment) Evaluate(scope *ast.Scope) (reflect.Value, error) {
-	value := self.Render(scope)
-	return reflect.NewString(string(value)), nil
 }

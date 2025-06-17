@@ -1,9 +1,7 @@
 package html
 
 import (
-	"github.com/thegogod/cmark/ast"
 	"github.com/thegogod/cmark/maps"
-	"github.com/thegogod/cmark/reflect"
 )
 
 // https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/title
@@ -135,12 +133,12 @@ func (self *TitleElement) Pop() *TitleElement {
 	return self
 }
 
-func (self TitleElement) Render(scope *ast.Scope) []byte {
-	return self.element.Render(scope)
+func (self TitleElement) Render() []byte {
+	return self.element.Render()
 }
 
-func (self TitleElement) RenderPretty(scope *ast.Scope, indent string) []byte {
-	return self.element.RenderPretty(scope, indent)
+func (self TitleElement) RenderPretty(indent string) []byte {
+	return self.element.RenderPretty(indent)
 }
 
 func (self *TitleElement) GetById(id string) Node {
@@ -149,13 +147,4 @@ func (self *TitleElement) GetById(id string) Node {
 
 func (self *TitleElement) Select(query ...any) []Node {
 	return self.element.Select(query...)
-}
-
-func (self TitleElement) Validate(scope *ast.Scope) error {
-	return nil
-}
-
-func (self TitleElement) Evaluate(scope *ast.Scope) (reflect.Value, error) {
-	value := self.Render(scope)
-	return reflect.NewString(string(value)), nil
 }

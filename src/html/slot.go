@@ -1,9 +1,7 @@
 package html
 
 import (
-	"github.com/thegogod/cmark/ast"
 	"github.com/thegogod/cmark/maps"
-	"github.com/thegogod/cmark/reflect"
 )
 
 // https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/slot
@@ -135,12 +133,12 @@ func (self *SlotElement) Pop() *SlotElement {
 	return self
 }
 
-func (self SlotElement) Render(scope *ast.Scope) []byte {
-	return self.element.Render(scope)
+func (self SlotElement) Render() []byte {
+	return self.element.Render()
 }
 
-func (self SlotElement) RenderPretty(scope *ast.Scope, indent string) []byte {
-	return self.element.RenderPretty(scope, indent)
+func (self SlotElement) RenderPretty(indent string) []byte {
+	return self.element.RenderPretty(indent)
 }
 
 func (self *SlotElement) GetById(id string) Node {
@@ -149,13 +147,4 @@ func (self *SlotElement) GetById(id string) Node {
 
 func (self *SlotElement) Select(query ...any) []Node {
 	return self.element.Select(query...)
-}
-
-func (self SlotElement) Validate(scope *ast.Scope) error {
-	return nil
-}
-
-func (self SlotElement) Evaluate(scope *ast.Scope) (reflect.Value, error) {
-	value := self.Render(scope)
-	return reflect.NewString(string(value)), nil
 }

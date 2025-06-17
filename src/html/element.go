@@ -5,9 +5,6 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/thegogod/cmark/ast"
-	"github.com/thegogod/cmark/reflect"
-
 	"github.com/thegogod/cmark/maps"
 )
 
@@ -300,7 +297,7 @@ func (self *Element) Pop() *Element {
 	return self
 }
 
-func (self Element) Render(scope *ast.Scope) []byte {
+func (self Element) Render() []byte {
 	html := "<" + self.Kind
 
 	for _, attr := range self.attributes {
@@ -319,14 +316,14 @@ func (self Element) Render(scope *ast.Scope) []byte {
 			continue
 		}
 
-		html += string(child.Render(scope))
+		html += string(child.Render())
 	}
 
 	html += fmt.Sprintf("</%s>", self.Kind)
 	return []byte(html)
 }
 
-func (self Element) RenderPretty(scope *ast.Scope, indent string) []byte {
+func (self Element) RenderPretty(indent string) []byte {
 	html := "<" + self.Kind
 
 	for _, attr := range self.attributes {
@@ -345,10 +342,10 @@ func (self Element) RenderPretty(scope *ast.Scope, indent string) []byte {
 			continue
 		}
 
-		lines := strings.Split(string(child.RenderPretty(scope, indent)), "\n")
+		lines := strings.Split(string(child.RenderPretty(indent)), "\n")
 
 		if len(lines) == 3 {
-			html += "\n" + indent + string(child.Render(scope))
+			html += "\n" + indent + string(child.Render())
 			continue
 		}
 
@@ -399,13 +396,4 @@ func (self *Element) Select(query ...any) []Node {
 	}
 
 	return nodes
-}
-
-func (self Element) Validate(scope *ast.Scope) error {
-	return nil
-}
-
-func (self Element) Evaluate(scope *ast.Scope) (reflect.Value, error) {
-	value := self.Render(scope)
-	return reflect.NewString(string(value)), nil
 }

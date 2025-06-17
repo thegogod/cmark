@@ -1,16 +1,15 @@
 package markdown
 
 import (
-	"github.com/thegogod/cmark/ast"
 	"github.com/thegogod/cmark/html"
 	"github.com/thegogod/cmark/tokens"
 )
 
-func (self *Markdown) ParseLink(parser ast.Parser, ptr *tokens.Pointer) (ast.Node, error) {
+func (self *Markdown) ParseLink(parser html.Parser, ptr *tokens.Pointer) (html.Node, error) {
 	return self.parseLink(parser, NewScanner(ptr))
 }
 
-func (self *Markdown) parseLink(parser ast.Parser, scan *_Scanner) (*html.AnchorElement, error) {
+func (self *Markdown) parseLink(parser html.Parser, scan *_Scanner) (*html.AnchorElement, error) {
 	if !scan.Match(LeftBracket) {
 		return nil, scan.Curr().Error("expected '['")
 	}

@@ -1,17 +1,16 @@
 package markdown
 
 import (
-	"github.com/thegogod/cmark/ast"
 	"github.com/thegogod/cmark/html"
 	"github.com/thegogod/cmark/tokens"
 	"github.com/thegogod/cmark/tx"
 )
 
-func (self *Markdown) ParseListItem(parser ast.Parser, ptr *tokens.Pointer) (ast.Node, error) {
+func (self *Markdown) ParseListItem(parser html.Parser, ptr *tokens.Pointer) (html.Node, error) {
 	return self.parseListItem(parser, NewScanner(ptr))
 }
 
-func (self *Markdown) parseListItem(parser ast.Parser, scan *_Scanner) (*html.ListItemElement, error) {
+func (self *Markdown) parseListItem(parser html.Parser, scan *_Scanner) (*html.ListItemElement, error) {
 	li := html.Li()
 	t := tx.New(scan)
 	node, err := self.parseTask(parser, scan)

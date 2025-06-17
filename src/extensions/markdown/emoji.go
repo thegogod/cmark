@@ -1,17 +1,16 @@
 package markdown
 
 import (
-	"github.com/thegogod/cmark/ast"
 	"github.com/thegogod/cmark/emojis"
 	"github.com/thegogod/cmark/html"
 	"github.com/thegogod/cmark/tokens"
 )
 
-func (self *Markdown) ParseEmoji(parser ast.Parser, ptr *tokens.Pointer) (ast.Node, error) {
+func (self *Markdown) ParseEmoji(parser html.Parser, ptr *tokens.Pointer) (html.Node, error) {
 	return self.parseEmoji(parser, NewScanner(ptr))
 }
 
-func (self *Markdown) parseEmoji(parser ast.Parser, scan *_Scanner) (html.Raw, error) {
+func (self *Markdown) parseEmoji(parser html.Parser, scan *_Scanner) (html.Raw, error) {
 	if !scan.MatchCount(Colon, 1) {
 		return nil, scan.Curr().Error("expected ':'")
 	}

@@ -3,9 +3,6 @@ package html
 import (
 	"strings"
 
-	"github.com/thegogod/cmark/ast"
-	"github.com/thegogod/cmark/reflect"
-
 	"github.com/thegogod/cmark/maps"
 )
 
@@ -87,11 +84,11 @@ func (self Raw) DelStyle(name ...string) {
 	return
 }
 
-func (self Raw) Render(scope *ast.Scope) []byte {
+func (self Raw) Render() []byte {
 	return self
 }
 
-func (self Raw) RenderPretty(scope *ast.Scope, indent string) []byte {
+func (self Raw) RenderPretty(indent string) []byte {
 	lines := strings.Split(string(self), "\n")
 	return []byte(strings.Join(lines, "\n"+indent))
 }
@@ -102,13 +99,4 @@ func (self Raw) GetById(id string) Node {
 
 func (self Raw) Select(query ...any) []Node {
 	return []Node{}
-}
-
-func (self Raw) Validate(scope *ast.Scope) error {
-	return nil
-}
-
-func (self Raw) Evaluate(scope *ast.Scope) (reflect.Value, error) {
-	value := self.Render(scope)
-	return reflect.NewString(string(value)), nil
 }

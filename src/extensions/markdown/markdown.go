@@ -3,7 +3,6 @@ package markdown
 import (
 	"bytes"
 
-	"github.com/thegogod/cmark/ast"
 	"github.com/thegogod/cmark/html"
 	"github.com/thegogod/cmark/tokens"
 	"github.com/thegogod/cmark/tx"
@@ -23,32 +22,32 @@ func (self *Markdown) Name() string {
 	return "markdown"
 }
 
-func (self *Markdown) ParseBlock(parser ast.Parser, ptr *tokens.Pointer) (ast.Node, error) {
+func (self *Markdown) ParseBlock(parser html.Parser, ptr *tokens.Pointer) (html.Node, error) {
 	return self.parseBlock(parser, NewScanner(ptr))
 }
 
-func (self *Markdown) ParseInline(parser ast.Parser, ptr *tokens.Pointer) (ast.Node, error) {
+func (self *Markdown) ParseInline(parser html.Parser, ptr *tokens.Pointer) (html.Node, error) {
 	return self.parseInline(parser, NewScanner(ptr))
 }
 
-func (self *Markdown) ParseSyntax(parser ast.Parser, ptr *tokens.Pointer, name string) (ast.Node, error) {
+func (self *Markdown) ParseSyntax(parser html.Parser, ptr *tokens.Pointer, name string) (html.Node, error) {
 	return nil, nil
 }
 
-func (self *Markdown) ParseText(parser ast.Parser, ptr *tokens.Pointer) ([]byte, error) {
+func (self *Markdown) ParseText(parser html.Parser, ptr *tokens.Pointer) ([]byte, error) {
 	return self.parseText(parser, NewScanner(ptr))
 }
 
-func (self *Markdown) ParseTextUntil(kind rune, parser ast.Parser, ptr *tokens.Pointer) ([]byte, error) {
+func (self *Markdown) ParseTextUntil(kind rune, parser html.Parser, ptr *tokens.Pointer) ([]byte, error) {
 	return self.parseTextUntil(kind, parser, NewScanner(ptr))
 }
 
-func (self *Markdown) parseBlock(parser ast.Parser, scan *_Scanner) (ast.Node, error) {
+func (self *Markdown) parseBlock(parser html.Parser, scan *_Scanner) (html.Node, error) {
 	if scan.Match(Eof) {
 		return nil, nil
 	}
 
-	var node ast.Node = nil
+	var node html.Node = nil
 	var err error = nil
 
 	for range self.blockQuoteDepth - 1 {
@@ -127,12 +126,12 @@ func (self *Markdown) parseBlock(parser ast.Parser, scan *_Scanner) (ast.Node, e
 	return node, err
 }
 
-func (self *Markdown) parseInline(parser ast.Parser, scan *_Scanner) (ast.Node, error) {
+func (self *Markdown) parseInline(parser html.Parser, scan *_Scanner) (html.Node, error) {
 	if scan.Match(Eof) {
 		return nil, nil
 	}
 
-	var node ast.Node = nil
+	var node html.Node = nil
 	var err error = nil
 
 	tx := tx.Compound(tx.New(scan.ptr), tx.New(scan))
@@ -220,7 +219,7 @@ func (self *Markdown) parseInline(parser ast.Parser, scan *_Scanner) (ast.Node, 
 	return node, err
 }
 
-func (self *Markdown) parseText(_ ast.Parser, scan *_Scanner) ([]byte, error) {
+func (self *Markdown) parseText(_ html.Parser, scan *_Scanner) ([]byte, error) {
 	if scan.Curr().Kind() == Eof {
 		return nil, nil
 	}
@@ -240,7 +239,7 @@ func (self *Markdown) parseText(_ ast.Parser, scan *_Scanner) ([]byte, error) {
 	return text, nil
 }
 
-func (self *Markdown) parseTextUntil(kind rune, parser ast.Parser, scan *_Scanner) ([]byte, error) {
+func (self *Markdown) parseTextUntil(kind rune, parser html.Parser, scan *_Scanner) ([]byte, error) {
 	if scan.Curr().Kind() == Eof {
 		return nil, nil
 	}

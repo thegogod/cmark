@@ -1,9 +1,7 @@
 package html
 
 import (
-	"github.com/thegogod/cmark/ast"
 	"github.com/thegogod/cmark/maps"
-	"github.com/thegogod/cmark/reflect"
 )
 
 type Host map[string]any
@@ -84,11 +82,11 @@ func (self Host) DelStyle(name ...string) {
 	return
 }
 
-func (self Host) Render(scope *ast.Scope) []byte {
+func (self Host) Render() []byte {
 	return []byte{}
 }
 
-func (self Host) RenderPretty(scope *ast.Scope, indent string) []byte {
+func (self Host) RenderPretty(indent string) []byte {
 	return []byte{}
 }
 
@@ -118,13 +116,4 @@ func (self Host) Select(query ...any) []Node {
 	}
 
 	return nodes
-}
-
-func (self Host) Validate(scope *ast.Scope) error {
-	return nil
-}
-
-func (self Host) Evaluate(scope *ast.Scope) (reflect.Value, error) {
-	value := self.Render(scope)
-	return reflect.NewString(string(value)), nil
 }
