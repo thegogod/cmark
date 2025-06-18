@@ -12,11 +12,11 @@ fmt:
 
 test:
 	go clean -testcache
-	go test ./... -cover -coverprofile=coverage.out -timeout 5s
+	go test ./... -cover -coverprofile=coverage.out -timeout 1s
 
 test.v:
 	go clean -testcache
-	go test ./... -cover -coverprofile=coverage.out -v -timeout 5s
+	go test ./... -cover -coverprofile=coverage.out -v -timeout 1s
 
 test.cov:
 	go tool cover -html=coverage.out

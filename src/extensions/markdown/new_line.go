@@ -9,14 +9,14 @@ func (self *Markdown) ParseNewLine(parser html.Parser, ptr *tokens.Pointer) (htm
 	return self.parseNewLine(parser, NewScanner(ptr))
 }
 
-func (self *Markdown) parseNewLine(_ html.Parser, scan *Scanner) (html.Raw, error) {
-	el := html.Raw("\n")
+func (self *Markdown) parseNewLine(_ html.Parser, scan *Scanner) (html.Node, error) {
+	lines := scan.NextWhile(NewLine)
 
-	if !scan.Match(NewLine) {
-		return el, scan.Curr().Error("expected newline")
+	if lines == 0 {
+		return nil, scan.Curr().Error("expected newline")
 	}
 
-	if scan.Match(NewLine) {
+	if lines > 1 {
 		return nil, nil
 	}
 
@@ -26,12 +26,6 @@ func (self *Markdown) parseNewLine(_ html.Parser, scan *Scanner) (html.Raw, erro
 		}
 	}
 
-	curr := scan.Curr().String()
-
-	if curr == " " || curr == "\n" {
-		return nil, nil
-	}
-
 	log.Debugln("new_line")
-	return el, nil
+	return html.Raw("\n"), nil
 }

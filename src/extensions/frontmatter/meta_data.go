@@ -11,7 +11,7 @@ func (self *Frontmatter) ParseMetaData(parser html.Parser, ptr *tokens.Pointer) 
 	return self.parseMetaData(parser, markdown.NewScanner(ptr))
 }
 
-func (self *Frontmatter) parseMetaData(parser html.Parser, scan *markdown.Scanner) (html.Node, error) {
+func (self *Frontmatter) parseMetaData(parser html.Parser, scan *markdown.Scanner) (html.MetaDataElement, error) {
 	el := html.MetaData()
 
 	if !(scan.Ptr().Sof() && scan.MatchCount(markdown.Dash, 3)) {

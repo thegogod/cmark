@@ -113,11 +113,7 @@ func (self *CMark) ParseBlock(ptr *tokens.Pointer) (html.Node, error) {
 		node, err := ext.ParseBlock(self, ptr)
 
 		if err == nil {
-			if node != nil {
-				return node, err
-			}
-
-			continue
+			return node, err
 		}
 
 		tx.Rollback()
@@ -135,6 +131,10 @@ func (self *CMark) ParseInline(ptr *tokens.Pointer) (html.Node, error) {
 
 	for _, ext := range self.extensions {
 		node, err := ext.ParseInline(self, ptr)
+
+		if node == nil && err == nil {
+			return nil, nil
+		}
 
 		if node != nil && err == nil {
 			return node, err

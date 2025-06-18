@@ -27,7 +27,7 @@ func (self *Frontmatter) ParseBlock(parser html.Parser, ptr *tokens.Pointer) (ht
 }
 
 func (self *Frontmatter) ParseInline(parser html.Parser, ptr *tokens.Pointer) (html.Node, error) {
-	return nil, nil
+	return nil, ptr.Iter.Curr.Error("no inline syntax")
 }
 
 func (self *Frontmatter) ParseText(parser html.Parser, ptr *tokens.Pointer) ([]byte, error) {

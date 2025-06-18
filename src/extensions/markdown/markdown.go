@@ -2,6 +2,7 @@ package markdown
 
 import (
 	"bytes"
+	"reflect"
 
 	"github.com/thegogod/cmark/html"
 	"github.com/thegogod/cmark/logging"
@@ -124,7 +125,12 @@ func (self *Markdown) parseBlock(parser html.Parser, scan *Scanner) (html.Node, 
 		node, err = self.parseParagraph(parser, scan)
 	}
 
-	log.Debugln("block")
+	if node != nil {
+		log.Debugln(node != nil, node)
+		v := reflect.Indirect(reflect.ValueOf(node))
+		log.Debugln("block", v.Type().Name())
+	}
+
 	return node, err
 }
 
@@ -209,12 +215,15 @@ func (self *Markdown) parseInline(parser html.Parser, scan *Scanner) (html.Node,
 		node, err = self.parseNewLine(parser, scan)
 	}
 
+	if node == nil && err == nil {
+		return nil, nil
+	}
+
 	if err != nil {
 		tx.Rollback()
 	}
 
 	if node == nil || err != nil {
-		log.Debugln("text")
 		text, texterr := self.parseText(parser, scan)
 
 		if text != nil {
@@ -224,7 +233,11 @@ func (self *Markdown) parseInline(parser html.Parser, scan *Scanner) (html.Node,
 		err = texterr
 	}
 
-	log.Debugln("inline", scan.ptr.Start.String(), scan.ptr.End.String())
+	if node != nil {
+		v := reflect.Indirect(reflect.ValueOf(node))
+		log.Debugln("inline", v.Type().Name())
+	}
+
 	return node, err
 }
 
