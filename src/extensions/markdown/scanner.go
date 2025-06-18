@@ -12,10 +12,10 @@ type Scanner struct {
 	types []func(ptr *tokens.Pointer) (*tokens.Token, error)
 }
 
-func NewScanner(ptr *tokens.Pointer, types ...func(ptr *tokens.Pointer) (*tokens.Token, error)) *Scanner {
+func NewScanner(ptr *tokens.Pointer) *Scanner {
 	self := &Scanner{
 		ptr:   ptr,
-		types: append(types, tokenScanners...),
+		types: tokenScanners,
 	}
 
 	if ptr.Sof() {
