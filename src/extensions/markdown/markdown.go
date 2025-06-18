@@ -41,7 +41,7 @@ func (self *Markdown) ParseTextUntil(kind rune, parser html.Parser, ptr *tokens.
 	return self.parseTextUntil(kind, parser, NewScanner(ptr))
 }
 
-func (self *Markdown) parseBlock(parser html.Parser, scan *_Scanner) (html.Node, error) {
+func (self *Markdown) parseBlock(parser html.Parser, scan *Scanner) (html.Node, error) {
 	if scan.Match(Eof) {
 		return nil, nil
 	}
@@ -55,10 +55,7 @@ func (self *Markdown) parseBlock(parser html.Parser, scan *_Scanner) (html.Node,
 		}
 	}
 
-	if scan.Match(NewLine) {
-		return parser.ParseBlock(scan.ptr)
-	}
-
+	scan.NextWhile(NewLine)
 	tx := tx.Compound(tx.New(self), tx.New(scan.ptr))
 	node, err = self.parseHtml(parser, scan)
 
@@ -131,7 +128,7 @@ func (self *Markdown) parseBlock(parser html.Parser, scan *_Scanner) (html.Node,
 	return node, err
 }
 
-func (self *Markdown) parseInline(parser html.Parser, scan *_Scanner) (html.Node, error) {
+func (self *Markdown) parseInline(parser html.Parser, scan *Scanner) (html.Node, error) {
 	if scan.Match(Eof) {
 		return nil, nil
 	}
@@ -212,10 +209,6 @@ func (self *Markdown) parseInline(parser html.Parser, scan *_Scanner) (html.Node
 		node, err = self.parseNewLine(parser, scan)
 	}
 
-	if node == nil && err == nil {
-		return nil, nil
-	}
-
 	if err != nil {
 		tx.Rollback()
 	}
@@ -235,7 +228,7 @@ func (self *Markdown) parseInline(parser html.Parser, scan *_Scanner) (html.Node
 	return node, err
 }
 
-func (self *Markdown) parseText(_ html.Parser, scan *_Scanner) ([]byte, error) {
+func (self *Markdown) parseText(_ html.Parser, scan *Scanner) ([]byte, error) {
 	if scan.Curr().Kind() == Eof {
 		return nil, nil
 	}
@@ -255,7 +248,7 @@ func (self *Markdown) parseText(_ html.Parser, scan *_Scanner) ([]byte, error) {
 	return text, nil
 }
 
-func (self *Markdown) parseTextUntil(kind rune, parser html.Parser, scan *_Scanner) ([]byte, error) {
+func (self *Markdown) parseTextUntil(kind rune, parser html.Parser, scan *Scanner) ([]byte, error) {
 	if scan.Curr().Kind() == Eof {
 		return nil, nil
 	}

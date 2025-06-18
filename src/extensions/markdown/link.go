@@ -9,7 +9,7 @@ func (self *Markdown) ParseLink(parser html.Parser, ptr *tokens.Pointer) (html.N
 	return self.parseLink(parser, NewScanner(ptr))
 }
 
-func (self *Markdown) parseLink(parser html.Parser, scan *_Scanner) (*html.AnchorElement, error) {
+func (self *Markdown) parseLink(parser html.Parser, scan *Scanner) (*html.AnchorElement, error) {
 	link := html.A()
 
 	if !scan.Match(LeftBracket) {

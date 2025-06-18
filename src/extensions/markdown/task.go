@@ -6,7 +6,7 @@ import (
 	"github.com/thegogod/cmark/html"
 )
 
-func (self *Markdown) parseTask(parser html.Parser, scan *_Scanner) (*html.LabelElement, error) {
+func (self *Markdown) parseTask(parser html.Parser, scan *Scanner) (*html.LabelElement, error) {
 	id := uuid.NewString()
 	label := html.Label().WithFor(id)
 	input := html.CheckBoxInput().WithId(id)

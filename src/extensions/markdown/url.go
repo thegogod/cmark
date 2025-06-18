@@ -12,7 +12,7 @@ func (self *Markdown) ParseUrl(parser html.Parser, ptr *tokens.Pointer) (html.No
 	return self.parseUrl(parser, NewScanner(ptr))
 }
 
-func (self *Markdown) parseUrl(parser html.Parser, scan *_Scanner) (*html.AnchorElement, error) {
+func (self *Markdown) parseUrl(parser html.Parser, scan *Scanner) (*html.AnchorElement, error) {
 	link := html.A()
 	protocol, err := self.parseText(parser, scan)
 

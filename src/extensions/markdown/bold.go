@@ -9,7 +9,7 @@ func (self *Markdown) ParseBold(parser html.Parser, ptr *tokens.Pointer) (html.N
 	return self.parseBold(parser, NewScanner(ptr))
 }
 
-func (self *Markdown) parseBold(parser html.Parser, scan *_Scanner) (*html.StrongElement, error) {
+func (self *Markdown) parseBold(parser html.Parser, scan *Scanner) (*html.StrongElement, error) {
 	el := html.Strong()
 
 	if !scan.MatchCount(Asterisk, 2) {

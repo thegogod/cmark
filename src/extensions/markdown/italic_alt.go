@@ -9,7 +9,7 @@ func (self *Markdown) ParseItalicAlt(parser html.Parser, ptr *tokens.Pointer) (h
 	return self.parseItalicAlt(parser, NewScanner(ptr))
 }
 
-func (self *Markdown) parseItalicAlt(parser html.Parser, scan *_Scanner) (*html.ItalicElement, error) {
+func (self *Markdown) parseItalicAlt(parser html.Parser, scan *Scanner) (*html.ItalicElement, error) {
 	italic := html.I()
 
 	if !scan.MatchCount(Underscore, 1) {

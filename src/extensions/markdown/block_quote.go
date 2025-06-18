@@ -9,7 +9,7 @@ func (self *Markdown) ParseBlockQuote(parser html.Parser, ptr *tokens.Pointer) (
 	return self.parseBlockQuote(parser, NewScanner(ptr))
 }
 
-func (self *Markdown) parseBlockQuote(parser html.Parser, scan *_Scanner) (*html.BlockQuoteElement, error) {
+func (self *Markdown) parseBlockQuote(parser html.Parser, scan *Scanner) (*html.BlockQuoteElement, error) {
 	el := html.BlockQuote()
 
 	if !scan.Match(GreaterThan) {

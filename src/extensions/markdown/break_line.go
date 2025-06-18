@@ -9,7 +9,7 @@ func (self *Markdown) ParseBreakLine(parser html.Parser, ptr *tokens.Pointer) (h
 	return self.parseBreakLine(parser, NewScanner(ptr))
 }
 
-func (self *Markdown) parseBreakLine(_ html.Parser, scan *_Scanner) (*html.BreakLineElement, error) {
+func (self *Markdown) parseBreakLine(_ html.Parser, scan *Scanner) (*html.BreakLineElement, error) {
 	el := html.Br()
 
 	if !(scan.MatchCount(Space, 2) && scan.Curr().Kind() == NewLine) {

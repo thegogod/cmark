@@ -9,7 +9,7 @@ func (self *Markdown) ParseBoldAlt(parser html.Parser, ptr *tokens.Pointer) (htm
 	return self.parseBoldAlt(parser, NewScanner(ptr))
 }
 
-func (self *Markdown) parseBoldAlt(parser html.Parser, scan *_Scanner) (*html.StrongElement, error) {
+func (self *Markdown) parseBoldAlt(parser html.Parser, scan *Scanner) (*html.StrongElement, error) {
 	el := html.Strong()
 
 	if !scan.MatchCount(Underscore, 2) {

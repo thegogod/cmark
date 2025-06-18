@@ -9,7 +9,7 @@ func (self *Markdown) ParseHorizontalRule(parser html.Parser, ptr *tokens.Pointe
 	return self.parseHorizontalRule(parser, NewScanner(ptr))
 }
 
-func (self *Markdown) parseHorizontalRule(_ html.Parser, scan *_Scanner) (*html.HorizontalRuleElement, error) {
+func (self *Markdown) parseHorizontalRule(_ html.Parser, scan *Scanner) (*html.HorizontalRuleElement, error) {
 	el := html.Hr()
 
 	if !scan.MatchCount(Dash, 3) {

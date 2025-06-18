@@ -7,13 +7,13 @@ import (
 	"github.com/thegogod/cmark/tx"
 )
 
-type _Scanner struct {
+type Scanner struct {
 	ptr   *tokens.Pointer
 	types []func(ptr *tokens.Pointer) (*tokens.Token, error)
 }
 
-func NewScanner(ptr *tokens.Pointer, types ...func(ptr *tokens.Pointer) (*tokens.Token, error)) *_Scanner {
-	self := &_Scanner{
+func NewScanner(ptr *tokens.Pointer, types ...func(ptr *tokens.Pointer) (*tokens.Token, error)) *Scanner {
+	self := &Scanner{
 		ptr:   ptr,
 		types: append(types, tokenScanners...),
 	}
@@ -25,15 +25,19 @@ func NewScanner(ptr *tokens.Pointer, types ...func(ptr *tokens.Pointer) (*tokens
 	return self
 }
 
-func (self _Scanner) Prev() tokens.Token {
+func (self Scanner) Ptr() *tokens.Pointer {
+	return self.ptr
+}
+
+func (self Scanner) Prev() tokens.Token {
 	return self.ptr.Iter.Prev
 }
 
-func (self _Scanner) Curr() tokens.Token {
+func (self Scanner) Curr() tokens.Token {
 	return self.ptr.Iter.Curr
 }
 
-func (self *_Scanner) Next() bool {
+func (self *Scanner) Next() bool {
 	token, err := self.Scan()
 
 	if err != nil {
@@ -43,7 +47,7 @@ func (self *_Scanner) Next() bool {
 	return token.Kind() > 0
 }
 
-func (self *_Scanner) NextWhile(kind ...rune) int {
+func (self *Scanner) NextWhile(kind ...rune) int {
 	i := 0
 
 	for slices.Contains(kind, self.Curr().Kind()) {
@@ -54,7 +58,7 @@ func (self *_Scanner) NextWhile(kind ...rune) int {
 	return i
 }
 
-func (self *_Scanner) Match(kind ...rune) bool {
+func (self *Scanner) Match(kind ...rune) bool {
 	tx := tx.New(self.ptr)
 
 	for _, k := range kind {
@@ -69,7 +73,7 @@ func (self *_Scanner) Match(kind ...rune) bool {
 	return true
 }
 
-func (self *_Scanner) MatchCount(kind rune, count int) bool {
+func (self *Scanner) MatchCount(kind rune, count int) bool {
 	tx := tx.New(self.ptr)
 
 	for range count {
@@ -87,7 +91,7 @@ func (self *_Scanner) MatchCount(kind rune, count int) bool {
 	return true
 }
 
-func (self *_Scanner) MatchLiteral(value string) bool {
+func (self *Scanner) MatchLiteral(value string) bool {
 	tx := tx.New(self.ptr)
 	i := 0
 
@@ -114,7 +118,7 @@ func (self *_Scanner) MatchLiteral(value string) bool {
 	return true
 }
 
-func (self *_Scanner) Consume(kind rune, message string) (*tokens.Token, error) {
+func (self *Scanner) Consume(kind rune, message string) (*tokens.Token, error) {
 	if self.Curr().Kind() == kind {
 		self.Next()
 		return self.Prev().Ptr(), nil
@@ -123,7 +127,7 @@ func (self *_Scanner) Consume(kind rune, message string) (*tokens.Token, error) 
 	return nil, self.Curr().Error(message)
 }
 
-func (self *_Scanner) Scan() (*tokens.Token, error) {
+func (self *Scanner) Scan() (*tokens.Token, error) {
 	self.ptr.Start = self.ptr.End
 	self.ptr.Next()
 	tx := tx.New(self.ptr)

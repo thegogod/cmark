@@ -1,4 +1,4 @@
-package markdown_test
+package frontmatter_test
 
 import (
 	"bytes"
@@ -8,13 +8,14 @@ import (
 	"testing"
 
 	"github.com/thegogod/cmark"
+	"github.com/thegogod/cmark/extensions/frontmatter"
 )
 
-func TestMarkdown(t *testing.T) {
+func TestFrontmatter(t *testing.T) {
 	// t.SkipNow()
 
 	RunDir(t, filepath.Join("testcases"), func(t *testing.T, md []byte, html []byte) {
-		parser := cmark.New()
+		parser := cmark.New(frontmatter.New())
 		node, err := parser.Parse(md)
 
 		if err != nil {

@@ -9,7 +9,7 @@ func (self *Markdown) ParseH2(parser html.Parser, ptr *tokens.Pointer) (html.Nod
 	return self.parseH2(parser, NewScanner(ptr))
 }
 
-func (self *Markdown) parseH2(parser html.Parser, scan *_Scanner) (*html.HeadingElement, error) {
+func (self *Markdown) parseH2(parser html.Parser, scan *Scanner) (*html.HeadingElement, error) {
 	heading := html.H2()
 
 	if !(scan.MatchCount(Hash, 2) && scan.Match(Space)) {

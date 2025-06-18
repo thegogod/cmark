@@ -9,7 +9,7 @@ func (self *Markdown) ParseStrikeAlt(parser html.Parser, ptr *tokens.Pointer) (h
 	return self.parseStrikeAlt(parser, NewScanner(ptr))
 }
 
-func (self *Markdown) parseStrikeAlt(parser html.Parser, scan *_Scanner) (*html.StrikeElement, error) {
+func (self *Markdown) parseStrikeAlt(parser html.Parser, scan *Scanner) (*html.StrikeElement, error) {
 	strike := html.S()
 
 	if !scan.MatchCount(Tilde, 2) {

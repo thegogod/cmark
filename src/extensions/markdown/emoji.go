@@ -10,7 +10,7 @@ func (self *Markdown) ParseEmoji(parser html.Parser, ptr *tokens.Pointer) (html.
 	return self.parseEmoji(parser, NewScanner(ptr))
 }
 
-func (self *Markdown) parseEmoji(parser html.Parser, scan *_Scanner) (html.Raw, error) {
+func (self *Markdown) parseEmoji(parser html.Parser, scan *Scanner) (html.Raw, error) {
 	alias := html.Raw{}
 
 	if !scan.MatchCount(Colon, 1) {

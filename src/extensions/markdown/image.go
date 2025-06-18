@@ -9,7 +9,7 @@ func (self *Markdown) ParseImage(parser html.Parser, ptr *tokens.Pointer) (html.
 	return self.parseImage(parser, NewScanner(ptr))
 }
 
-func (self *Markdown) parseImage(parser html.Parser, scan *_Scanner) (*html.ImageElement, error) {
+func (self *Markdown) parseImage(parser html.Parser, scan *Scanner) (*html.ImageElement, error) {
 	image := html.Img()
 
 	if !scan.Match(Bang) {

@@ -107,22 +107,23 @@ func (self *CMark) ParseBlock(ptr *tokens.Pointer) (html.Node, error) {
 		return nil, nil
 	}
 
-	var node html.Node = nil
-	var err error = nil
-
 	tx := tx.New(ptr)
 
 	for _, ext := range self.extensions {
-		node, err = ext.ParseBlock(self, ptr)
+		node, err := ext.ParseBlock(self, ptr)
 
-		if node != nil && err == nil {
-			break
+		if err == nil {
+			if node != nil {
+				return node, err
+			}
+
+			continue
 		}
 
 		tx.Rollback()
 	}
 
-	return node, err
+	return nil, nil
 }
 
 func (self *CMark) ParseInline(ptr *tokens.Pointer) (html.Node, error) {
@@ -130,20 +131,17 @@ func (self *CMark) ParseInline(ptr *tokens.Pointer) (html.Node, error) {
 		return nil, nil
 	}
 
-	var node html.Node = nil
-	var err error = nil
-
 	tx := tx.New(ptr)
 
 	for _, ext := range self.extensions {
-		node, err = ext.ParseInline(self, ptr)
+		node, err := ext.ParseInline(self, ptr)
 
 		if node != nil && err == nil {
-			break
+			return node, err
 		}
 
 		tx.Rollback()
 	}
 
-	return node, err
+	return nil, nil
 }

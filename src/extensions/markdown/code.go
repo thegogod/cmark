@@ -9,7 +9,7 @@ func (self *Markdown) ParseCode(parser html.Parser, ptr *tokens.Pointer) (html.N
 	return self.parseCode(parser, NewScanner(ptr))
 }
 
-func (self *Markdown) parseCode(parser html.Parser, scan *_Scanner) (*html.CodeElement, error) {
+func (self *Markdown) parseCode(parser html.Parser, scan *Scanner) (*html.CodeElement, error) {
 	code := html.Code()
 
 	if !scan.MatchCount(BackQuote, 1) {

@@ -9,7 +9,7 @@ func (self *Markdown) ParseHighlight(parser html.Parser, ptr *tokens.Pointer) (h
 	return self.parseHighlight(parser, NewScanner(ptr))
 }
 
-func (self *Markdown) parseHighlight(parser html.Parser, scan *_Scanner) (*html.MarkElement, error) {
+func (self *Markdown) parseHighlight(parser html.Parser, scan *Scanner) (*html.MarkElement, error) {
 	mark := html.Mark()
 
 	if !scan.MatchCount(EqualsEquals, 1) {

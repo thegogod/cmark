@@ -9,7 +9,7 @@ func (self *Markdown) ParseParagraph(parser html.Parser, ptr *tokens.Pointer) (h
 	return self.parseParagraph(parser, NewScanner(ptr))
 }
 
-func (self *Markdown) parseParagraph(parser html.Parser, scan *_Scanner) (*html.ParagraphElement, error) {
+func (self *Markdown) parseParagraph(parser html.Parser, scan *Scanner) (*html.ParagraphElement, error) {
 	paragraph := html.P()
 	buff := html.Raw{}
 

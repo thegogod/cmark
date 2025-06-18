@@ -10,7 +10,7 @@ func (self *Markdown) ParseListItem(parser html.Parser, ptr *tokens.Pointer) (ht
 	return self.parseListItem(parser, NewScanner(ptr))
 }
 
-func (self *Markdown) parseListItem(parser html.Parser, scan *_Scanner) (*html.ListItemElement, error) {
+func (self *Markdown) parseListItem(parser html.Parser, scan *Scanner) (*html.ListItemElement, error) {
 	log.Debugln("list_item")
 	li := html.Li()
 	t := tx.Compound(tx.New(scan.ptr), tx.New(self))
@@ -40,12 +40,10 @@ func (self *Markdown) parseListItem(parser html.Parser, scan *_Scanner) (*html.L
 				break
 			}
 
-			node, err = nil, nil
 			tx := tx.Compound(tx.New(scan.ptr), tx.New(self))
+			node, err = self.parseOrderedList(parser, scan)
 
-			if scan.Match(Integer) && scan.Match(Period) && scan.Match(Space) {
-				node, err = self.parseOrderedList(parser, scan)
-			} else if scan.Match(Dash) && scan.Match(Space) {
+			if err != nil {
 				node, err = self.parseUnorderedList(parser, scan)
 			}
 

@@ -11,7 +11,7 @@ func (self *Markdown) ParseTable(parser html.Parser, ptr *tokens.Pointer) (html.
 	return self.parseTable(parser, NewScanner(ptr))
 }
 
-func (self *Markdown) parseTable(parser html.Parser, scan *_Scanner) (*html.TableElement, error) {
+func (self *Markdown) parseTable(parser html.Parser, scan *Scanner) (*html.TableElement, error) {
 	table := html.Table()
 
 	if !scan.MatchCount(Pipe, 1) {

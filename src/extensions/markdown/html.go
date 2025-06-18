@@ -12,7 +12,7 @@ func (self *Markdown) ParseHtml(parser html.Parser, ptr *tokens.Pointer) (html.N
 	return self.parseHtml(parser, NewScanner(ptr))
 }
 
-func (self *Markdown) parseHtml(parser html.Parser, scan *_Scanner) (*html.Element, error) {
+func (self *Markdown) parseHtml(parser html.Parser, scan *Scanner) (*html.Element, error) {
 	el := html.Elem("")
 
 	if !scan.Match(LessThan) {
@@ -104,7 +104,7 @@ func (self *Markdown) parseHtml(parser html.Parser, scan *_Scanner) (*html.Eleme
 	return el, nil
 }
 
-func (self *Markdown) parseClosingTag(scan *_Scanner, name []byte, depth int) bool {
+func (self *Markdown) parseClosingTag(scan *Scanner, name []byte, depth int) bool {
 	if !scan.Match(LessThan, Slash) {
 		return false
 	}

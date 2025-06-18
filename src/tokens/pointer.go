@@ -20,7 +20,7 @@ func Ptr(src []byte) *Pointer {
 }
 
 func (self Pointer) Sof() bool {
-	return self.Iter.Curr.kind == -1
+	return self.Iter.Prev.kind == -1
 }
 
 func (self Pointer) Eof() bool {

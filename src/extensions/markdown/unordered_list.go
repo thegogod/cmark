@@ -9,7 +9,7 @@ func (self *Markdown) ParseUnorderedList(parser html.Parser, ptr *tokens.Pointer
 	return self.parseUnorderedList(parser, NewScanner(ptr))
 }
 
-func (self *Markdown) parseUnorderedList(parser html.Parser, scan *_Scanner) (*html.UnorderedListElement, error) {
+func (self *Markdown) parseUnorderedList(parser html.Parser, scan *Scanner) (*html.UnorderedListElement, error) {
 	ul := html.Ul()
 
 	if !(scan.Match(Dash) && scan.Match(Space)) {

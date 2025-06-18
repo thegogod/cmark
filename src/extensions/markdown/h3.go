@@ -9,7 +9,7 @@ func (self *Markdown) ParseH3(parser html.Parser, ptr *tokens.Pointer) (html.Nod
 	return self.parseH3(parser, NewScanner(ptr))
 }
 
-func (self *Markdown) parseH3(parser html.Parser, scan *_Scanner) (*html.HeadingElement, error) {
+func (self *Markdown) parseH3(parser html.Parser, scan *Scanner) (*html.HeadingElement, error) {
 	heading := html.H3()
 
 	if !(scan.MatchCount(Hash, 3) && scan.Match(Space)) {

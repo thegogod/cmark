@@ -11,7 +11,7 @@ func (self *Markdown) ParseCodeBlock(parser html.Parser, ptr *tokens.Pointer) (h
 	return self.parseCodeBlock(parser, NewScanner(ptr))
 }
 
-func (self *Markdown) parseCodeBlock(parser html.Parser, scan *_Scanner) (*html.PreElement, error) {
+func (self *Markdown) parseCodeBlock(parser html.Parser, scan *Scanner) (*html.PreElement, error) {
 	code := html.Code()
 
 	if !scan.MatchCount(BackQuote, 3) {

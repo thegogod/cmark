@@ -9,7 +9,7 @@ func (self *Markdown) ParseStrike(parser html.Parser, ptr *tokens.Pointer) (html
 	return self.parseStrike(parser, NewScanner(ptr))
 }
 
-func (self *Markdown) parseStrike(parser html.Parser, scan *_Scanner) (*html.StrikeElement, error) {
+func (self *Markdown) parseStrike(parser html.Parser, scan *Scanner) (*html.StrikeElement, error) {
 	strike := html.S()
 
 	if !scan.MatchCount(Tilde, 1) {

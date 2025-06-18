@@ -9,7 +9,7 @@ func (self *Markdown) ParseOrderedList(parser html.Parser, ptr *tokens.Pointer) 
 	return self.parseOrderedList(parser, NewScanner(ptr))
 }
 
-func (self *Markdown) parseOrderedList(parser html.Parser, scan *_Scanner) (*html.OrderedListElement, error) {
+func (self *Markdown) parseOrderedList(parser html.Parser, scan *Scanner) (*html.OrderedListElement, error) {
 	ol := html.Ol()
 
 	if !(scan.Match(Integer) && scan.Match(Period) && scan.Match(Space)) {
