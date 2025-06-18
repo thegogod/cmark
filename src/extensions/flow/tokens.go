@@ -6,6 +6,7 @@ const (
 	Eof Token = iota
 
 	// singles
+	At
 	Comma
 	Dot
 	Colon

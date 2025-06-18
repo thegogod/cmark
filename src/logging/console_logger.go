@@ -45,7 +45,7 @@ func (self ConsoleLogger) Debugln(v ...any) {
 }
 
 func (self ConsoleLogger) Log(level Level, v ...any) {
-	if self.Disabled || level > self.Level {
+	if self.Disabled || level < self.Level {
 		return
 	}
 
@@ -76,7 +76,7 @@ func (self ConsoleLogger) Log(level Level, v ...any) {
 }
 
 func (self ConsoleLogger) Logf(level Level, format string, v ...any) {
-	if self.Disabled || level > self.Level {
+	if self.Disabled || level < self.Level {
 		return
 	}
 
@@ -107,7 +107,7 @@ func (self ConsoleLogger) Logf(level Level, format string, v ...any) {
 }
 
 func (self ConsoleLogger) Logln(level Level, v ...any) {
-	if self.Disabled || level > self.Level {
+	if self.Disabled || level < self.Level {
 		return
 	}
 

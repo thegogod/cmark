@@ -24,10 +24,8 @@ func LevelFromString(level string) Level {
 		return Warn
 	case "error":
 		return Error
-	case "":
-		return Info
 	default:
-		return Invalid
+		return Info
 	}
 }
 

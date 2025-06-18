@@ -126,7 +126,6 @@ func (self *Markdown) parseBlock(parser html.Parser, scan *Scanner) (html.Node, 
 	}
 
 	if node != nil {
-		log.Debugln(node != nil, node)
 		v := reflect.Indirect(reflect.ValueOf(node))
 		log.Debugln("block", v.Type().Name())
 	}

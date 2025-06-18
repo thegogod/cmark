@@ -15,7 +15,7 @@ func NewScanner(ptr *tokens.Pointer) *Scanner {
 	self := &Scanner{ptr}
 
 	if ptr.Sof() {
-		self.Next()
+		self.Scan()
 	}
 
 	return self
@@ -124,6 +124,10 @@ func (self *Scanner) Consume(kind rune, message string) (*tokens.Token, error) {
 }
 
 func (self *Scanner) Scan() (*tokens.Token, error) {
+	if self.ptr.Eof() {
+		return self.ptr.Ok(Eof).Ptr(), nil
+	}
+
 	self.ptr.Start = self.ptr.End
 	b := self.ptr.Curr()
 	self.ptr.Next()
@@ -135,6 +139,8 @@ func (self *Scanner) Scan() (*tokens.Token, error) {
 	case '\n':
 		// ignore whitespace
 		break
+	case '@':
+		return self.ptr.Ok(At).Ptr(), nil
 	case '(':
 		return self.ptr.Ok(LeftParen).Ptr(), nil
 	case ')':
@@ -264,7 +270,7 @@ func (self Scanner) isInt(b byte) bool {
 func (self Scanner) isAlpha(b byte) bool {
 	return (b >= 'a' && b <= 'z') ||
 		(b >= 'A' && b <= 'Z') ||
-		(b == '_')
+		(b == '_' || b == '$')
 }
 
 func (self *Scanner) onComment() (*tokens.Token, error) {
