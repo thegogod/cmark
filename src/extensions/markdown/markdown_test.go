@@ -1,6 +1,7 @@
 package markdown_test
 
 import (
+	"bytes"
 	"os"
 	"path/filepath"
 	"strings"
@@ -31,7 +32,7 @@ func TestMarkdown(t *testing.T) {
 			return
 		}
 
-		if string(html) != string(value) {
+		if bytes.Equal(html, value) {
 			t.Logf("expected: %v", string(html))
 			t.Logf("received: %v", string(value))
 			t.FailNow()
