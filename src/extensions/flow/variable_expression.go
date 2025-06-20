@@ -25,11 +25,15 @@ func (self VariableExpression) Validate(scope *Scope) error {
 }
 
 func (self VariableExpression) Evaluate(scope *Scope) (reflect.Value, error) {
+	if err := self.Validate(scope); err != nil {
+		return reflect.NewNil(), err
+	}
+
 	entry := scope.Get(self.name.String())
 
-	if entry.Kind == TypeScope {
+	if entry.Value.IsNil() {
 		return reflect.NewNil(), fmt.Errorf("cannot reference type '%s' as a value", self.name.String())
 	}
 
-	return reflect.ValueOf(entry.Value), nil
+	return entry.Value, nil
 }

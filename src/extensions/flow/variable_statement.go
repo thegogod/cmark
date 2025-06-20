@@ -48,7 +48,7 @@ func (self *Flow) parseVariableStatement(parser html.Parser, scan *Scanner) (Sta
 			return nil, kind.Error("type '" + kind.String() + "' not found")
 		}
 
-		_type = self.scope.Get(kind.String()).Value.(reflect.Type)
+		_type = self.scope.Get(kind.String()).Type
 
 		if scan.Match(QuestionMark) {
 			nilable = scan.Prev().Ptr()
@@ -79,12 +79,7 @@ func (self *Flow) parseVariableStatement(parser html.Parser, scan *Scanner) (Sta
 		return nil, err
 	}
 
-	self.scope.SetLocal(name.String(), &ScopeEntry{
-		Kind:  TypeScope,
-		Name:  name.String(),
-		Value: _type,
-	})
-
+	self.scope.SetLocal(name.String(), &ScopeEntry{Type: _type})
 	log.Infoln("defined new variable '" + name.String() + "' with type '" + _type.Name() + "'")
 
 	return VariableStatement{
@@ -131,11 +126,6 @@ func (self VariableStatement) Evaluate(scope *Scope) (reflect.Value, error) {
 		value = v
 	}
 
-	scope.SetLocal(self.name.String(), &ScopeEntry{
-		Kind:  VarScope,
-		Name:  self.name.String(),
-		Value: value,
-	})
-
+	scope.SetLocal(self.name.String(), &ScopeEntry{Value: value})
 	return value, nil
 }

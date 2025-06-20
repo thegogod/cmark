@@ -96,11 +96,6 @@ func (self AssignExpression) Evaluate(scope *Scope) (reflect.Value, error) {
 		return value, err
 	}
 
-	scope.Set(self.name.String(), &ScopeEntry{
-		Kind:  VarScope,
-		Name:  self.name.String(),
-		Value: value,
-	})
-
+	scope.Set(self.name.String(), &ScopeEntry{Value: value})
 	return value, nil
 }

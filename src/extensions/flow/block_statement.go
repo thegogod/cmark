@@ -20,17 +20,14 @@ func (self *Flow) ParseBlockStatement(parser html.Parser, ptr *tokens.Pointer) (
 }
 
 func (self *Flow) parseBlockStatement(parser html.Parser, scan *Scanner) (Statement, error) {
-	parent := self.scope
-	self.scope = parent.Create()
+	self.scope = self.scope.Create()
 	nodes := []html.Node{}
-	log.Infoln(fmt.Sprintf("entering scope depth %d", self.scope.depth))
 
 	defer func() {
-		log.Infoln(fmt.Sprintf("exiting scope depth %d", self.scope.depth))
-		self.scope = parent
+		self.scope = self.scope.parent
 	}()
 
-	for !scan.Match(RightBrace) {
+	for {
 		node, err := parser.ParseInline(scan.ptr)
 
 		if node == nil {
@@ -39,6 +36,15 @@ func (self *Flow) parseBlockStatement(parser html.Parser, scan *Scanner) (Statem
 
 		if err != nil {
 			return nil, err
+		}
+
+		if scan.Curr().Ext() != self.Name() {
+			scan.ptr.Back()
+			scan.Next()
+		}
+
+		if scan.Curr().Kind() == RightBrace {
+			break
 		}
 
 		nodes = append(nodes, node)
@@ -56,8 +62,10 @@ type BlockStatement struct {
 }
 
 func (self BlockStatement) Validate(scope *Scope) error {
+	child := scope.Create()
+
 	for _, statement := range self.statements {
-		if err := statement.Validate(scope); err != nil {
+		if err := statement.Validate(child); err != nil {
 			return err
 		}
 	}

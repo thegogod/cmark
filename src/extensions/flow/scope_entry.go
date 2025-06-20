@@ -1,15 +1,8 @@
 package flow
 
-type ScopeEntryKind uint8
-
-const (
-	Invalid ScopeEntryKind = iota
-	TypeScope
-	VarScope
-)
+import "github.com/thegogod/cmark/reflect"
 
 type ScopeEntry struct {
-	Kind  ScopeEntryKind
-	Name  string
-	Value any
+	Type  reflect.Type
+	Value reflect.Value
 }

@@ -26,5 +26,5 @@ func (self SelfExpression) Validate(scope *Scope) error {
 
 func (self SelfExpression) Evaluate(scope *Scope) (reflect.Value, error) {
 	entry := scope.GetLocal("self")
-	return entry.Value.(reflect.Value), nil
+	return entry.Value, nil
 }

@@ -56,16 +56,19 @@ func (self *Flow) parsePrimaryExpression(parser html.Parser, scan *Scanner) (Exp
 
 		return SelfExpression{
 			keyword: scan.Prev(),
-			_type:   self.scope.Get("self").Value.(reflect.Type),
+			_type:   self.scope.Get("self").Type,
 		}, nil
 	} else if scan.Match(Identifier) {
 		if !self.scope.Has(scan.Prev().String()) {
-			return nil, scan.Prev().Error("undefined identifier '" + scan.Prev().String() + "'")
+			return nil, scan.Prev().Error(fmt.Sprintf(
+				"undefined identifier '%s'",
+				scan.Prev().String(),
+			))
 		}
 
 		return VariableExpression{
 			name:  scan.Prev(),
-			_type: self.scope.Get(scan.Prev().String()).Value.(reflect.Type),
+			_type: self.scope.Get(scan.Prev().String()).Type,
 		}, nil
 	} else if scan.Match(LeftParen) {
 		e, err := self.parseExpression(parser, scan)

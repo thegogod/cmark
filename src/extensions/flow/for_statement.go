@@ -1,7 +1,6 @@
 package flow
 
 import (
-	"fmt"
 	"strings"
 
 	"github.com/thegogod/cmark/html"
@@ -20,13 +19,10 @@ func (self *Flow) ParseForStatement(parser html.Parser, ptr *tokens.Pointer) (ht
 }
 
 func (self *Flow) parseForStatement(parser html.Parser, scan *Scanner) (Statement, error) {
-	parent := self.scope
-	self.scope = parent.Create()
-	log.Infoln(fmt.Sprintf("entering scope depth %d", self.scope.depth))
+	self.scope = self.scope.Create()
 
 	defer func() {
-		log.Infoln(fmt.Sprintf("exiting scope depth %d", self.scope.depth))
-		self.scope = parent
+		self.scope = self.scope.parent
 	}()
 
 	var init Statement = nil

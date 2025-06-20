@@ -32,7 +32,7 @@ func (self *Flow) parseCallExpression(parser html.Parser, scan *Scanner) (Expres
 
 			switch v := expr.(type) {
 			case VariableExpression:
-				_type = self.scope.Get(v.name.String()).Value.(reflect.Type)
+				_type = self.scope.Get(v.name.String()).Type
 			case GetExpression:
 				_type = v.Type()
 			}
@@ -184,11 +184,7 @@ func (self CallExpression) Evaluate(scope *Scope) (reflect.Value, error) {
 
 	for i, arg := range args {
 		name := callee.FnType().Params()[i].Name
-		child.SetLocal(name, &ScopeEntry{
-			Name:  name,
-			Kind:  VarScope,
-			Value: arg,
-		})
+		child.SetLocal(name, &ScopeEntry{Value: arg})
 	}
 
 	fn := callee.Fn().(FunctionStatement)
