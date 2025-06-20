@@ -8,15 +8,11 @@ type LiteralExpression struct {
 	value reflect.Value
 }
 
-func Literal(value reflect.Value) LiteralExpression {
-	return LiteralExpression{value: value}
-}
-
 func (self LiteralExpression) Type() reflect.Type {
 	return self.value.Type()
 }
 
-func (self LiteralExpression) Validate() error {
+func (self LiteralExpression) Validate(scope *Scope) error {
 	return nil
 }
 

@@ -13,24 +13,16 @@ type BinaryExpression struct {
 	right Expression
 }
 
-func Binary(left Expression, op tokens.Token, right Expression) BinaryExpression {
-	return BinaryExpression{
-		left:  left,
-		op:    op,
-		right: right,
-	}
-}
-
 func (self BinaryExpression) Type() reflect.Type {
 	return self.left.Type()
 }
 
-func (self BinaryExpression) Validate() error {
-	if err := self.left.Validate(); err != nil {
+func (self BinaryExpression) Validate(scope *Scope) error {
+	if err := self.left.Validate(scope); err != nil {
 		return err
 	}
 
-	if err := self.right.Validate(); err != nil {
+	if err := self.right.Validate(scope); err != nil {
 		return err
 	}
 
@@ -48,13 +40,13 @@ func (self BinaryExpression) Evaluate(scope *Scope) (reflect.Value, error) {
 	left, err := self.left.Evaluate(scope)
 
 	if err != nil {
-		return reflect.NewNil(), err
+		return left, err
 	}
 
 	right, err := self.right.Evaluate(scope)
 
 	if err != nil {
-		return reflect.NewNil(), err
+		return right, err
 	}
 
 	switch self.op.Kind() {
@@ -82,7 +74,7 @@ func (self BinaryExpression) Evaluate(scope *Scope) (reflect.Value, error) {
 		return left.Multiply(right), nil
 	case Slash:
 		return left.Divide(right), nil
+	default:
+		panic("invalid binary expression")
 	}
-
-	return reflect.NewNil(), nil
 }

@@ -1,28 +1,47 @@
 package flow
 
 import (
+	"github.com/thegogod/cmark/html"
 	"github.com/thegogod/cmark/reflect"
 	"github.com/thegogod/cmark/tokens"
 )
+
+func (self *Flow) ParseUnaryExpression(parser html.Parser, ptr *tokens.Pointer) (html.Node, error) {
+	node, err := self.parseUnaryExpression(parser, NewScanner(ptr))
+
+	if err != nil {
+		return nil, err
+	}
+
+	return Html(node), nil
+}
+
+func (self *Flow) parseUnaryExpression(parser html.Parser, scan *Scanner) (Expression, error) {
+	if scan.Match(Not) || scan.Match(Minus) {
+		op := scan.Prev()
+		right, err := self.parseUnaryExpression(parser, scan)
+
+		if err != nil {
+			return nil, err
+		}
+
+		return UnaryExpression{op, right}, nil
+	}
+
+	return self.parseCallExpression(parser, scan)
+}
 
 type UnaryExpression struct {
 	op    tokens.Token
 	right Expression
 }
 
-func Unary(op tokens.Token, right Expression) UnaryExpression {
-	return UnaryExpression{
-		op:    op,
-		right: right,
-	}
-}
-
 func (self UnaryExpression) Type() reflect.Type {
 	return self.right.Type()
 }
 
-func (self UnaryExpression) Validate() error {
-	return self.right.Validate()
+func (self UnaryExpression) Validate(scope *Scope) error {
+	return self.right.Validate(scope)
 }
 
 func (self UnaryExpression) Evaluate(scope *Scope) (reflect.Value, error) {

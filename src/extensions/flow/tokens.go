@@ -6,69 +6,75 @@ const (
 	Eof Token = iota
 
 	// singles
-	At
-	Comma
-	Dot
-	Colon
-	SemiColon
-	LeftParen
-	RightParen
-	LeftBrace
-	RightBrace
-	LeftBracket
-	RightBracket
-	QuestionMark
+
+	Comma        // ,
+	Dot          // .
+	Colon        // :
+	SemiColon    // ;
+	LeftParen    // (
+	RightParen   // )
+	LeftBrace    // {
+	RightBrace   // }
+	LeftBracket  // [
+	RightBracket // ]
+	QuestionMark // ?
 
 	// doubles
-	DoubleColon
-	ReturnType
+
+	DoubleColon // ::
+	ReturnType  // ->
 
 	// arithmetic
-	Plus
-	PlusEq
-	Minus
-	MinusEq
-	Star
-	StarEq
-	Slash
-	SlashEq
+
+	Plus    // +
+	PlusEq  // +=
+	Minus   // -
+	MinusEq // -=
+	Star    // *
+	StarEq  // *=
+	Slash   // /
+	SlashEq // /=
 
 	// logical
-	Not
-	NotEq
-	Eq
-	EqEq
-	Gt
-	GtEq
-	Lt
-	LtEq
-	And
-	Or
+
+	Not   // !
+	NotEq // !=
+	Eq    // =
+	EqEq  // ==
+	Gt    // >
+	GtEq  // >=
+	Lt    // <
+	LtEq  // <=
+	And   // &&
+	Or    // ||
 
 	// literals
-	Identifier
-	LString
-	LByte
-	LInt
-	LFloat
-	Nil
+
+	Identifier // test
+	LString    // "test"
+	LByte      // 't'
+	LInt       // 10
+	LFloat     // 10.5
+	Nil        // nil
 
 	// keywords
-	If
-	Else
-	For
-	Let
-	Const
-	Fn
-	Return
-	Struct
-	Self
-	Pub
-	Use
-	True
-	False
+
+	If     // @if
+	Else   // @else
+	For    // @for
+	Let    // let
+	Const  // const
+	Fn     // @fn
+	Return // return
+	Struct // @struct
+	Self   // self
+	Pub    // @pub
+	Use    // @use
+	True   // true
+	False  // false
 
 	// types
+
 	Type
 	String
 	Byte
@@ -79,8 +85,8 @@ const (
 )
 
 var Keywords = map[string]Token{
-	"if":     If,
-	"else":   Else,
+	"@if":    If,
+	"@else":  Else,
 	"for":    For,
 	"let":    Let,
 	"const":  Const,

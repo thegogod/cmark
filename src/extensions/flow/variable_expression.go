@@ -12,23 +12,19 @@ type VariableExpression struct {
 	_type reflect.Type
 }
 
-func VarRef(name tokens.Token, _type reflect.Type) VariableExpression {
-	return VariableExpression{name, _type}
-}
-
 func (self VariableExpression) Type() reflect.Type {
 	return self._type
 }
 
-func (self VariableExpression) Validate() error {
+func (self VariableExpression) Validate(scope *Scope) error {
+	if !scope.Has(self.name.String()) {
+		return fmt.Errorf("identifier '%s' not found", self.name.String())
+	}
+
 	return nil
 }
 
 func (self VariableExpression) Evaluate(scope *Scope) (reflect.Value, error) {
-	if !scope.Has(self.name.String()) {
-		return reflect.NewNil(), fmt.Errorf("identifier '%s' not found", self.name.String())
-	}
-
 	entry := scope.Get(self.name.String())
 
 	if entry.Kind == TypeScope {

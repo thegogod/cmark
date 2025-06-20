@@ -1,8 +1,54 @@
 package flow
 
 import (
+	"github.com/thegogod/cmark/html"
 	"github.com/thegogod/cmark/reflect"
+	"github.com/thegogod/cmark/tokens"
 )
+
+func (self *Flow) ParseIfStatement(parser html.Parser, ptr *tokens.Pointer) (html.Node, error) {
+	node, err := self.parseIfStatement(parser, NewScanner(ptr))
+
+	if err != nil {
+		return nil, err
+	}
+
+	return Html(node), nil
+}
+
+func (self *Flow) parseIfStatement(parser html.Parser, scan *Scanner) (Statement, error) {
+	if _, err := scan.Consume(LeftParen, "expected '('"); err != nil {
+		return nil, err
+	}
+
+	cond, err := self.parseExpression(parser, scan)
+
+	if err != nil {
+		return nil, err
+	}
+
+	if _, err = scan.Consume(RightParen, "expected ')'"); err != nil {
+		return nil, err
+	}
+
+	then, err := self.parseStatement(parser, scan)
+
+	if err != nil {
+		return nil, err
+	}
+
+	var _else Statement = nil
+
+	if scan.Match(Else) {
+		_else, err = self.parseStatement(parser, scan)
+	}
+
+	return IfStatement{
+		condition: cond,
+		then:      then,
+		_else:     _else,
+	}, nil
+}
 
 type IfStatement struct {
 	condition Expression
@@ -10,17 +56,17 @@ type IfStatement struct {
 	_else     Statement
 }
 
-func (self IfStatement) Validate() error {
-	if err := self.condition.Validate(); err != nil {
+func (self IfStatement) Validate(scope *Scope) error {
+	if err := self.condition.Validate(scope); err != nil {
 		return err
 	}
 
-	if err := self.then.Validate(); err != nil {
+	if err := self.then.Validate(scope); err != nil {
 		return err
 	}
 
 	if self._else != nil {
-		return self._else.Validate()
+		return self._else.Validate(scope)
 	}
 
 	return nil
@@ -30,7 +76,7 @@ func (self IfStatement) Evaluate(scope *Scope) (reflect.Value, error) {
 	value, err := self.condition.Evaluate(scope)
 
 	if err != nil {
-		return reflect.NewNil(), err
+		return value, err
 	}
 
 	if value.Truthy() {

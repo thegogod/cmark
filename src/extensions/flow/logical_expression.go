@@ -13,24 +13,16 @@ type LogicalExpression struct {
 	right Expression
 }
 
-func Logical(left Expression, op tokens.Token, right Expression) LogicalExpression {
-	return LogicalExpression{
-		left:  left,
-		op:    op,
-		right: right,
-	}
-}
-
 func (self LogicalExpression) Type() reflect.Type {
 	return self.left.Type()
 }
 
-func (self LogicalExpression) Validate() error {
-	if err := self.left.Validate(); err != nil {
+func (self LogicalExpression) Validate(scope *Scope) error {
+	if err := self.left.Validate(scope); err != nil {
 		return err
 	}
 
-	if err := self.right.Validate(); err != nil {
+	if err := self.right.Validate(scope); err != nil {
 		return err
 	}
 

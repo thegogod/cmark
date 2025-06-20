@@ -1,10 +1,12 @@
 package tokens
 
 type Pointer struct {
+	Ext   string
 	Src   []byte
 	Start Position
 	End   Position
 	Iter  Iterator
+	Prev  *Pointer
 }
 
 func Ptr(src []byte) *Pointer {
@@ -55,6 +57,14 @@ func (self *Pointer) Next() byte {
 	return self.Peek()
 }
 
+func (self *Pointer) Back() {
+	if self.Prev == nil {
+		return
+	}
+
+	*self = *self.Prev
+}
+
 func (self Pointer) Bytes() []byte {
 	return self.Src[self.Start.Index:self.End.Index]
 }
@@ -64,8 +74,11 @@ func (self Pointer) Err(message string) error {
 }
 
 func (self *Pointer) Ok(kind rune) Token {
+	prev := *self
+	self.Prev = &prev
 	token := New(
 		kind,
+		self.Ext,
 		self.Start,
 		self.End,
 		self.Bytes(),

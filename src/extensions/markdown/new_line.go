@@ -10,13 +10,11 @@ func (self *Markdown) ParseNewLine(parser html.Parser, ptr *tokens.Pointer) (htm
 }
 
 func (self *Markdown) parseNewLine(_ html.Parser, scan *Scanner) (html.Node, error) {
-	lines := scan.NextWhile(NewLine)
-
-	if lines == 0 {
+	if !scan.Match(NewLine) {
 		return nil, scan.Curr().Error("expected newline")
 	}
 
-	if lines > 1 {
+	if scan.Match(NewLine) {
 		return nil, nil
 	}
 

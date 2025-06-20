@@ -140,7 +140,7 @@ func (self *Scanner) Scan() (*tokens.Token, error) {
 		// ignore whitespace
 		break
 	case '@':
-		return self.ptr.Ok(At).Ptr(), nil
+		return self.onKeyword()
 	case '(':
 		return self.ptr.Ok(LeftParen).Ptr(), nil
 	case ')':
@@ -346,4 +346,18 @@ func (self *Scanner) onIdentifier() (*tokens.Token, error) {
 	}
 
 	return self.ptr.Ok(Identifier).Ptr(), nil
+}
+
+func (self *Scanner) onKeyword() (*tokens.Token, error) {
+	for self.isAlpha(self.ptr.Peek()) || self.isInt(self.ptr.Peek()) {
+		self.ptr.Next()
+	}
+
+	name := self.ptr.Bytes()
+
+	if kind, ok := Keywords[string(name)]; ok {
+		return self.ptr.Ok(kind).Ptr(), nil
+	}
+
+	return nil, self.ptr.Err("expected keyword")
 }

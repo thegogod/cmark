@@ -2,6 +2,7 @@ package flow
 
 type Scope struct {
 	parent *Scope
+	depth  int
 	values map[string]*ScopeEntry
 }
 
@@ -11,6 +12,7 @@ func NewScope() *Scope {
 
 func (self *Scope) Create() *Scope {
 	child := NewScope()
+	child.depth = self.depth + 1
 	child.parent = self
 	return child
 }

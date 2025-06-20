@@ -18,6 +18,26 @@ func (self Value) IsString() bool {
 }
 
 func (self Value) String() string {
+	if self.IsBool() {
+		return self.BoolToString()
+	} else if self.IsByte() {
+		return self.ByteToString()
+	} else if self.IsFloat() {
+		return self.FloatToString()
+	} else if self.IsInt() {
+		return self.IntToString()
+	} else if self.IsFn() {
+		return self.FnToString()
+	} else if self.IsMap() {
+		return self.MapToString()
+	} else if self.IsMod() {
+		return self.ModToString()
+	} else if self.IsNil() {
+		return self.NilToString()
+	} else if self.IsSlice() {
+		return self.SliceToString()
+	}
+
 	return self._value.(string)
 }
 

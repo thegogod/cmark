@@ -22,7 +22,7 @@ func New() *Markdown {
 	return &Markdown{path: []string{}}
 }
 
-func (self *Markdown) Name() string {
+func (self Markdown) Name() string {
 	return "markdown"
 }
 
@@ -56,7 +56,10 @@ func (self *Markdown) parseBlock(parser html.Parser, scan *Scanner) (html.Node, 
 		}
 	}
 
-	scan.NextWhile(NewLine)
+	if scan.Match(NewLine) {
+		return parser.ParseBlock(scan.ptr)
+	}
+
 	tx := tx.Compound(tx.New(self), tx.New(scan.ptr))
 	node, err = self.parseHtml(parser, scan)
 

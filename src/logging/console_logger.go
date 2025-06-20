@@ -32,6 +32,30 @@ func (self ConsoleLogger) Child(name string) ConsoleLogger {
 	return Console(strings.Join([]string{self.Name, name}, "."))
 }
 
+func (self ConsoleLogger) Info(v ...any) {
+	self.Log(Info, v...)
+}
+
+func (self ConsoleLogger) Infof(format string, v ...any) {
+	self.Logf(Info, format, v...)
+}
+
+func (self ConsoleLogger) Infoln(v ...any) {
+	self.Logln(Info, v...)
+}
+
+func (self ConsoleLogger) Warn(v ...any) {
+	self.Log(Warn, v...)
+}
+
+func (self ConsoleLogger) Warnf(format string, v ...any) {
+	self.Logf(Warn, format, v...)
+}
+
+func (self ConsoleLogger) Warnln(v ...any) {
+	self.Logln(Warn, v...)
+}
+
 func (self ConsoleLogger) Debug(v ...any) {
 	self.Log(Debug, v...)
 }
