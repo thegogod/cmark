@@ -146,8 +146,18 @@ func (self *Scanner) Scan() (*tokens.Token, error) {
 	case ')':
 		return self.ptr.Ok(RightParen).Ptr(), nil
 	case '{':
+		if self.ptr.Peek() == '{' {
+			self.ptr.Next()
+			return self.ptr.Ok(DoubleLeftBrace).Ptr(), nil
+		}
+
 		return self.ptr.Ok(LeftBrace).Ptr(), nil
 	case '}':
+		if self.ptr.Peek() == '}' {
+			self.ptr.Next()
+			return self.ptr.Ok(DoubleRightBrace).Ptr(), nil
+		}
+
 		return self.ptr.Ok(RightBrace).Ptr(), nil
 	case '[':
 		return self.ptr.Ok(LeftBracket).Ptr(), nil

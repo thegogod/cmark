@@ -1,6 +1,8 @@
 package flow
 
 import (
+	"fmt"
+
 	"github.com/thegogod/cmark/html"
 	"github.com/thegogod/cmark/reflect"
 	"github.com/thegogod/cmark/tokens"
@@ -39,7 +41,11 @@ func (self *Flow) parseAssignmentExpression(parser html.Parser, scan *Scanner) (
 		}
 
 		if !varType.Equals(assignType) {
-			return nil, scan.Prev().Error("expected type '" + varType.Name() + "', received '" + assignType.Name() + "'")
+			return nil, scan.Prev().Error(fmt.Sprintf(
+				"expected type '%s', received '%s'",
+				varType.Name(),
+				assignType.Name(),
+			))
 		}
 
 		switch v := expr.(type) {

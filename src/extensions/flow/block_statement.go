@@ -30,8 +30,12 @@ func (self *Flow) parseBlockStatement(parser html.Parser, scan *Scanner) (Statem
 		self.scope = parent
 	}()
 
-	for scan.Prev().Kind() != RightBrace && scan.Curr().Kind() != Eof {
+	for !scan.Match(RightBrace) {
 		node, err := parser.ParseInline(scan.ptr)
+
+		if node == nil {
+			return nil, scan.Curr().Error("expected closing '}'")
+		}
 
 		if err != nil {
 			return nil, err
@@ -40,8 +44,8 @@ func (self *Flow) parseBlockStatement(parser html.Parser, scan *Scanner) (Statem
 		nodes = append(nodes, node)
 	}
 
-	if scan.Prev().Kind() != RightBrace {
-		return nil, fmt.Errorf("expected '}'")
+	if _, err := scan.Consume(RightBrace, fmt.Sprintf("expected '}', received '%s'", scan.Curr().String())); err != nil {
+		return nil, err
 	}
 
 	return BlockStatement{[]Statement{StatementHtml(nodes)}}, nil

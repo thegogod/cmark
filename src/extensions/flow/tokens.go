@@ -21,8 +21,10 @@ const (
 
 	// doubles
 
-	DoubleColon // ::
-	ReturnType  // ->
+	DoubleColon      // ::
+	ReturnType       // ->
+	DoubleLeftBrace  // {{
+	DoubleRightBrace // }}
 
 	// arithmetic
 

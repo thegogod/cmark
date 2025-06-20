@@ -30,7 +30,11 @@ func (self BinaryExpression) Validate(scope *Scope) error {
 	right := self.right.Type()
 
 	if !left.Equals(right) {
-		return self.op.Error(fmt.Sprintf("expected type '%s', received '%s'", left.Name(), right.Name()))
+		return self.op.Error(fmt.Sprintf(
+			"expected type '%s', received '%s'",
+			left.Name(),
+			right.Name(),
+		))
 	}
 
 	return nil

@@ -74,7 +74,10 @@ func (self *Flow) parsePrimaryExpression(parser html.Parser, scan *Scanner) (Exp
 			return nil, err
 		}
 
-		scan.Consume(RightParen, "expected ')'")
+		if _, err := scan.Consume(RightParen, "expected ')'"); err != nil {
+			return nil, err
+		}
+
 		return GroupingExpression{e}, nil
 	} else if scan.Match(LeftBracket) {
 		var _type reflect.Type = nil
@@ -122,5 +125,9 @@ func (self *Flow) parsePrimaryExpression(parser html.Parser, scan *Scanner) (Exp
 		}, nil
 	}
 
-	return nil, scan.Prev().Error(fmt.Sprintf("expected expression, received '%s' of kind %v", scan.Curr().String(), scan.Curr().Kind()))
+	return nil, scan.Prev().Error(fmt.Sprintf(
+		"expected expression, received '%s' of kind %v",
+		scan.Curr().String(),
+		scan.Curr().Kind(),
+	))
 }

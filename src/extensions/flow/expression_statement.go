@@ -23,10 +23,6 @@ func (self *Flow) parseExpressionStatement(parser html.Parser, scan *Scanner) (S
 		return nil, err
 	}
 
-	if _, err = scan.Consume(SemiColon, "expected ';'"); err != nil {
-		return nil, err
-	}
-
 	return ExpressionStatement{expr}, nil
 }
 
