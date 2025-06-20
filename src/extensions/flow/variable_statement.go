@@ -1,6 +1,9 @@
 package flow
 
 import (
+	"fmt"
+	"strings"
+
 	"github.com/thegogod/cmark/html"
 	"github.com/thegogod/cmark/reflect"
 	"github.com/thegogod/cmark/tokens"
@@ -80,7 +83,12 @@ func (self *Flow) parseVariableStatement(parser html.Parser, scan *Scanner) (Sta
 	}
 
 	self.scope.SetLocal(name.String(), &ScopeEntry{Type: _type})
-	log.Infoln("defined new variable '" + name.String() + "' with type '" + _type.Name() + "'")
+	log.Infoln(fmt.Sprintf(
+		"defined new variable '%s' with type '%s' at depth %d",
+		name.String(),
+		_type.Name(),
+		self.scope.depth,
+	))
 
 	return VariableStatement{
 		keyword: keyword,
@@ -128,4 +136,16 @@ func (self VariableStatement) Evaluate(scope *Scope) (reflect.Value, error) {
 
 	scope.SetLocal(self.name.String(), &ScopeEntry{Value: value})
 	return value, nil
+}
+
+func (self VariableStatement) Print() {
+	self.PrintIndent(0, "  ")
+}
+
+func (self VariableStatement) PrintIndent(depth int, indent string) {
+	fmt.Printf("%s[VariableStatement]: keyword=\"%s\" name=\"%s\" type=\"%s\"\n", strings.Repeat(indent, depth), self.keyword.String(), self.name.String(), self._type.Name())
+
+	if self.init != nil {
+		self.init.PrintIndent(depth+1, indent)
+	}
 }

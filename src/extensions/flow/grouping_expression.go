@@ -1,6 +1,9 @@
 package flow
 
 import (
+	"fmt"
+	"strings"
+
 	"github.com/thegogod/cmark/reflect"
 )
 
@@ -18,4 +21,13 @@ func (self GroupingExpression) Validate(scope *Scope) error {
 
 func (self GroupingExpression) Evaluate(scope *Scope) (reflect.Value, error) {
 	return self.expr.Evaluate(scope)
+}
+
+func (self GroupingExpression) Print() {
+	self.PrintIndent(0, "  ")
+}
+
+func (self GroupingExpression) PrintIndent(depth int, indent string) {
+	fmt.Printf("%s[GroupExpression]:\n", strings.Repeat(indent, depth))
+	self.expr.PrintIndent(depth+1, indent)
 }

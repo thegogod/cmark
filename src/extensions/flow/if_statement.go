@@ -1,6 +1,9 @@
 package flow
 
 import (
+	"fmt"
+	"strings"
+
 	"github.com/thegogod/cmark/html"
 	"github.com/thegogod/cmark/reflect"
 	"github.com/thegogod/cmark/tokens"
@@ -86,4 +89,18 @@ func (self IfStatement) Evaluate(scope *Scope) (reflect.Value, error) {
 	}
 
 	return reflect.NewNil(), nil
+}
+
+func (self IfStatement) Print() {
+	self.PrintIndent(0, "  ")
+}
+
+func (self IfStatement) PrintIndent(depth int, indent string) {
+	fmt.Printf("%s[IfStatement]:\n", strings.Repeat(indent, depth))
+	self.condition.PrintIndent(depth+1, indent)
+	self.then.PrintIndent(depth+1, indent)
+
+	if self._else != nil {
+		self._else.PrintIndent(depth+1, indent)
+	}
 }

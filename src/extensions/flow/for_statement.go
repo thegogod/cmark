@@ -1,6 +1,7 @@
 package flow
 
 import (
+	"fmt"
 	"strings"
 
 	"github.com/thegogod/cmark/html"
@@ -19,11 +20,11 @@ func (self *Flow) ParseForStatement(parser html.Parser, ptr *tokens.Pointer) (ht
 }
 
 func (self *Flow) parseForStatement(parser html.Parser, scan *Scanner) (Statement, error) {
-	self.scope = self.scope.Create()
+	// self.scope = self.scope.Create()
 
-	defer func() {
-		self.scope = self.scope.parent
-	}()
+	// defer func() {
+	// 	self.scope = self.scope.parent
+	// }()
 
 	var init Statement = nil
 	var cond Expression = nil
@@ -156,4 +157,24 @@ func (self ForStatement) Evaluate(scope *Scope) (reflect.Value, error) {
 	}
 
 	return reflect.NewString(strings.Join(values, "")), nil
+}
+
+func (self ForStatement) Print() {
+	self.PrintIndent(0, "  ")
+}
+
+func (self ForStatement) PrintIndent(depth int, indent string) {
+	fmt.Printf("%s[ForStatement]:\n", strings.Repeat(indent, depth))
+
+	if self.init != nil {
+		self.init.PrintIndent(depth+1, indent)
+	}
+
+	self.cond.PrintIndent(depth+1, indent)
+
+	if self.inc != nil {
+		self.inc.PrintIndent(depth+1, indent)
+	}
+
+	self.body.PrintIndent(depth+1, indent)
 }

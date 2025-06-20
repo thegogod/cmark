@@ -1,6 +1,9 @@
 package flow
 
 import (
+	"fmt"
+	"strings"
+
 	"github.com/thegogod/cmark/html"
 	"github.com/thegogod/cmark/reflect"
 	"github.com/thegogod/cmark/tokens"
@@ -60,4 +63,13 @@ func (self UnaryExpression) Evaluate(scope *Scope) (reflect.Value, error) {
 	}
 
 	return right, nil
+}
+
+func (self UnaryExpression) Print() {
+	self.PrintIndent(0, "  ")
+}
+
+func (self UnaryExpression) PrintIndent(depth int, indent string) {
+	fmt.Printf("%s[UnaryExpression]: op=\"%s\"\n", strings.Repeat(indent, depth), self.op.String())
+	self.right.PrintIndent(depth+1, indent)
 }

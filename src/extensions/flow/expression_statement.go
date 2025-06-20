@@ -1,6 +1,9 @@
 package flow
 
 import (
+	"fmt"
+	"strings"
+
 	"github.com/thegogod/cmark/html"
 	"github.com/thegogod/cmark/reflect"
 	"github.com/thegogod/cmark/tokens"
@@ -35,6 +38,14 @@ func (self ExpressionStatement) Validate(scope *Scope) error {
 }
 
 func (self ExpressionStatement) Evaluate(scope *Scope) (reflect.Value, error) {
-	_, err := self.expression.Evaluate(scope)
-	return reflect.NewNil(), err
+	return self.expression.Evaluate(scope)
+}
+
+func (self ExpressionStatement) Print() {
+	self.PrintIndent(0, "  ")
+}
+
+func (self ExpressionStatement) PrintIndent(depth int, indent string) {
+	fmt.Printf("%s[ExpressionStatement]:\n", strings.Repeat(indent, depth))
+	self.expression.PrintIndent(depth+1, indent)
 }

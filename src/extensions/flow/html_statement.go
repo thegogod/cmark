@@ -1,6 +1,9 @@
 package flow
 
 import (
+	"fmt"
+	"strings"
+
 	"github.com/thegogod/cmark/html"
 	"github.com/thegogod/cmark/maps"
 	"github.com/thegogod/cmark/reflect"
@@ -160,4 +163,16 @@ func (self HtmlStatement) GetById(id string) html.Node {
 
 func (self HtmlStatement) Select(query ...any) []html.Node {
 	return []html.Node{}
+}
+
+func (self HtmlStatement) Print() {
+	self.PrintIndent(0, "  ")
+}
+
+func (self HtmlStatement) PrintIndent(depth int, indent string) {
+	fmt.Printf("%s[HtmlStatement]:\n", strings.Repeat(indent, depth))
+
+	for _, statement := range self {
+		statement.PrintIndent(depth+1, indent)
+	}
 }

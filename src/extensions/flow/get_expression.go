@@ -2,6 +2,7 @@ package flow
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/thegogod/cmark/reflect"
 	"github.com/thegogod/cmark/tokens"
@@ -37,4 +38,13 @@ func (self GetExpression) Evaluate(scope *Scope) (reflect.Value, error) {
 	}
 
 	return value.GetMember(self.name.String()), nil
+}
+
+func (self GetExpression) Print() {
+	self.PrintIndent(0, "  ")
+}
+
+func (self GetExpression) PrintIndent(depth int, indent string) {
+	fmt.Printf("%s[GetExpression]: name=\"%s\"\n", strings.Repeat(indent, depth), self.name.String())
+	self.object.PrintIndent(depth+1, indent)
 }

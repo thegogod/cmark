@@ -9,6 +9,8 @@ import (
 type Statement interface {
 	Validate(scope *Scope) error
 	Evaluate(scope *Scope) (reflect.Value, error)
+	Print()
+	PrintIndent(depth int, indent string)
 }
 
 func (self *Flow) ParseStatement(parser html.Parser, ptr *tokens.Pointer) (html.Node, error) {

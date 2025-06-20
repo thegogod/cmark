@@ -1,6 +1,9 @@
 package flow
 
 import (
+	"fmt"
+	"strings"
+
 	"github.com/thegogod/cmark/reflect"
 )
 
@@ -18,4 +21,12 @@ func (self LiteralExpression) Validate(scope *Scope) error {
 
 func (self LiteralExpression) Evaluate(scope *Scope) (reflect.Value, error) {
 	return self.value, nil
+}
+
+func (self LiteralExpression) Print() {
+	self.PrintIndent(0, "  ")
+}
+
+func (self LiteralExpression) PrintIndent(depth int, indent string) {
+	fmt.Printf("%s[LiteralExpression]: value=%v\n", strings.Repeat(indent, depth), self.value.Any())
 }

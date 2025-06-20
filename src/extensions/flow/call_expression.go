@@ -2,6 +2,7 @@ package flow
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/thegogod/cmark/html"
 	"github.com/thegogod/cmark/reflect"
@@ -194,4 +195,17 @@ func (self CallExpression) Evaluate(scope *Scope) (reflect.Value, error) {
 	}
 
 	return fn.Evaluate(child)
+}
+
+func (self CallExpression) Print() {
+	self.PrintIndent(0, "  ")
+}
+
+func (self CallExpression) PrintIndent(depth int, indent string) {
+	fmt.Printf("%s[CallExpression]:\n", strings.Repeat(indent, depth))
+	self.callee.PrintIndent(depth+1, indent)
+
+	for _, arg := range self.args {
+		arg.PrintIndent(depth+1, indent)
+	}
 }

@@ -1,6 +1,9 @@
 package flow
 
 import (
+	"fmt"
+	"strings"
+
 	"github.com/thegogod/cmark/reflect"
 	"github.com/thegogod/cmark/tokens"
 )
@@ -38,4 +41,20 @@ func (self FunctionStatement) Evaluate(scope *Scope) (reflect.Value, error) {
 	}
 
 	return reflect.NewNil(), nil
+}
+
+func (self FunctionStatement) Print() {
+	self.PrintIndent(0, "  ")
+}
+
+func (self FunctionStatement) PrintIndent(depth int, indent string) {
+	fmt.Printf("%s[FunctionStatement]: name=\"%s\" return_type=\"%s\"\n", strings.Repeat(indent, depth), self.name.String(), self.returnType.Name())
+
+	for _, param := range self.params {
+		param.PrintIndent(depth+1, indent)
+	}
+
+	for _, statement := range self.body {
+		statement.PrintIndent(depth+1, indent)
+	}
 }

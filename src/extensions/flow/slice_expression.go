@@ -1,6 +1,9 @@
 package flow
 
 import (
+	"fmt"
+	"strings"
+
 	"github.com/thegogod/cmark/reflect"
 )
 
@@ -37,4 +40,16 @@ func (self SliceExpression) Evaluate(scope *Scope) (reflect.Value, error) {
 	}
 
 	return slice, nil
+}
+
+func (self SliceExpression) Print() {
+	self.PrintIndent(0, "  ")
+}
+
+func (self SliceExpression) PrintIndent(depth int, indent string) {
+	fmt.Printf("%s[SliceExpression]: type=\"%s\"\n", strings.Repeat(indent, depth), self._type.Name())
+
+	for _, expression := range self.items {
+		expression.PrintIndent(depth+1, indent)
+	}
 }

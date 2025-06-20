@@ -20,12 +20,12 @@ func (self *Flow) ParseBlockStatement(parser html.Parser, ptr *tokens.Pointer) (
 }
 
 func (self *Flow) parseBlockStatement(parser html.Parser, scan *Scanner) (Statement, error) {
-	self.scope = self.scope.Create()
+	// self.scope = self.scope.Create()
 	nodes := []html.Node{}
 
-	defer func() {
-		self.scope = self.scope.parent
-	}()
+	// defer func() {
+	// self.scope = self.scope.parent
+	// }()
 
 	for {
 		node, err := parser.ParseInline(scan.ptr)
@@ -43,11 +43,11 @@ func (self *Flow) parseBlockStatement(parser html.Parser, scan *Scanner) (Statem
 			scan.Next()
 		}
 
+		nodes = append(nodes, node)
+
 		if scan.Curr().Kind() == RightBrace {
 			break
 		}
-
-		nodes = append(nodes, node)
 	}
 
 	if _, err := scan.Consume(RightBrace, fmt.Sprintf("expected '}', received '%s'", scan.Curr().String())); err != nil {
@@ -90,4 +90,16 @@ func (self BlockStatement) Evaluate(scope *Scope) (reflect.Value, error) {
 	}
 
 	return reflect.NewString(strings.Join(values, "")), nil
+}
+
+func (self BlockStatement) Print() {
+	self.PrintIndent(0, "  ")
+}
+
+func (self BlockStatement) PrintIndent(depth int, indent string) {
+	fmt.Printf("%s[BlockStatement]:\n", strings.Repeat(indent, depth))
+
+	for _, statement := range self.statements {
+		statement.PrintIndent(depth+1, indent)
+	}
 }

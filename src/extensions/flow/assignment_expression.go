@@ -2,6 +2,7 @@ package flow
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/thegogod/cmark/html"
 	"github.com/thegogod/cmark/reflect"
@@ -98,4 +99,13 @@ func (self AssignExpression) Evaluate(scope *Scope) (reflect.Value, error) {
 
 	scope.Set(self.name.String(), &ScopeEntry{Value: value})
 	return value, nil
+}
+
+func (self AssignExpression) Print() {
+	self.PrintIndent(0, "  ")
+}
+
+func (self AssignExpression) PrintIndent(depth int, indent string) {
+	fmt.Printf("%s[AssignExpression]: name=\"%s\"\n", strings.Repeat(indent, depth), self.name.String())
+	self.value.PrintIndent(depth+1, indent)
 }

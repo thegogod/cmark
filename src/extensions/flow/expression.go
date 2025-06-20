@@ -10,6 +10,8 @@ type Expression interface {
 	Type() reflect.Type
 	Validate(scope *Scope) error
 	Evaluate(scope *Scope) (reflect.Value, error)
+	Print()
+	PrintIndent(depth int, indent string)
 }
 
 func (self *Flow) ParseExpression(parser html.Parser, ptr *tokens.Pointer) (html.Node, error) {

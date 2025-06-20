@@ -22,6 +22,7 @@ func TestFlow(t *testing.T) {
 			t.Fatal(err)
 		}
 
+		flow.StatementHtml{node}.Print()
 		value := node.RenderPretty("  ")
 
 		if err != nil {

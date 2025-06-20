@@ -2,6 +2,7 @@ package flow
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/thegogod/cmark/reflect"
 	"github.com/thegogod/cmark/tokens"
@@ -81,4 +82,14 @@ func (self BinaryExpression) Evaluate(scope *Scope) (reflect.Value, error) {
 	default:
 		panic("invalid binary expression")
 	}
+}
+
+func (self BinaryExpression) Print() {
+	self.PrintIndent(0, "  ")
+}
+
+func (self BinaryExpression) PrintIndent(depth int, indent string) {
+	fmt.Printf("%s[BinaryExpression]: op=\"%s\"\n", strings.Repeat(indent, depth), self.op.String())
+	self.left.PrintIndent(depth+1, indent)
+	self.right.PrintIndent(depth+1, indent)
 }
